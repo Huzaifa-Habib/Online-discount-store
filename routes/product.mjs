@@ -1,14 +1,20 @@
 import express from 'express';
-import {tweetModel } from './dbmodels.mjs'
+import {productModel,userModel,categoryModel } from './dbmodels.mjs'
 import mongoose from 'mongoose';
 
 const router = express.Router()
 
-router.post('/tweet', (req, res) => {
+router.post('/item', (req, res) => {
     const body = req.body;
    
   if ( // validation
-      !body.text
+      !body.name||
+      !body.productImage||
+      !body.description||
+      !body.price||
+      !body.unit||
+      !body.description
+
       
   ) {
       res.status(400).send({
@@ -19,20 +25,20 @@ router.post('/tweet', (req, res) => {
 
   console.log(body)
 
-    tweetModel.create({
-        text:body.text,
-        image:body.image,
-        profilePhoto:body.profilePhoto,
-        userFirstName:body.userFirstName,
-        userLastName:body.userLastName,
-        email:body.email,
-        owner: new mongoose.Types.ObjectId(body.token._id)
+    productModel.create({
+        name:body.name ,
+        image: body.productImage,
+        category:body.category,
+        unitName: body.unit,
+        unitPrice:body.price,
+        description:body.description
+        
     },
         (err, saved) => {
             if (!err) {
                 console.log(saved);
                 res.send({
-                    message: "Tweet posted successfully"
+                    message: "Product posted successfully"
                 });
             } else {
                 res.status(500).send({
@@ -43,72 +49,126 @@ router.post('/tweet', (req, res) => {
 
 })
 
-router.get('/tweets', (req, res) => {
-    const userId = new mongoose.Types.ObjectId(req.body.token._id);
+router.post('/category', (req, res) => {
+    const body = req.body;
+   
+  if ( // validation
+      !body.category
+       
+  ) {
+      res.status(400).send({
+          message: "required parameters missing",
+      });
+      return;
+  }
 
-    tweetModel.find(
-        { owner: userId },
-        {},
-        {
-            sort: { "_id": -1 },
-            limit: 50,
-            skip: 0,
-            populate:
-            {
-                path: "owner",
-                select: 'firstName lastName email profileImage'
-            }
+  console.log("cat body",body)
+
+  categoryModel.findOne({ name: body.category }, (err, category) => {
+    if (!err) {
+        console.log("category: ", category);
+
+        if (category) { // category already exist
+            console.log("category already exist: ", category);
+            res.status(400).send({ message: "category already exist, Please try a different name" });
+            return;
         }
-        , (err, data) => {
-            if (!err) {
-                res.send({
-                    message: "got all tweets successfully",
-                    data: data
+
+        else{
+            categoryModel.create({
+                name:body.category
+            
+            },
+                (err, saved) => {
+                    if (!err) {
+                        console.log(saved);
+                        res.send({
+                            message: "Category posted successfully"
+                        });
+                    } else {
+                        res.status(500).send({
+                            message: "server error"
+                        })
+                    }
                 })
-            } else {
-                res.status(500).send({
-                    message: "server error"
-                })
-            }
-        });
- 
+
+        }
+    }
+
+   
+
+})
 })
 
-router.get('/tweetFeed', (req, res) => {
-    const page = req.query.page || 0
+router.get('/categories', (req, res) => {
 
-    tweetModel.find(
-        { isDeleted: false },
-        {},
-        {
-            sort: { "_id": -1 },
-            limit: 50,
-            skip: 0,
-            populate:
-            {
-                path: "owner",
-                select: 'firstName lastName email'
-            }
+    categoryModel.find({}, (err, data) => {
+        if (!err) {
+            res.send({
+                message: "got all categories successfully",
+                data: data
+            })
+        } else {
+            res.status(500).send({
+                message: "server error"
+            })
         }
-        , (err, data) => {
-            if (!err) {
-                res.send({
-                    message: "got all tweets successfully",
-                    data: data
-                })
-            } else {
-                res.status(500).send({
-                    message: "server error"
-                })
-            }
-        });
+    });
+})
+
+
+// router.get('/items', (req, res) => {
+//     const productId = new mongoose.Types.ObjectId(req.body.token._id);
+
+//     productModel.find(
+//         { owner: userId },
+//         {},
+//         {
+//             sort: { "_id": -1 },
+//             limit: 50,
+//             skip: 0,
+//             populate:
+//             {
+//                 path: "owner",
+//                 select: 'firstName lastName email profileImage'
+//             }
+//         }
+//         , (err, data) => {
+//             if (!err) {
+//                 res.send({
+//                     message: "got all tweets successfully",
+//                     data: data
+//                 })
+//             } else {
+//                 res.status(500).send({
+//                     message: "server error"
+//                 })
+//             }
+//         });
+ 
+// })
+
+router.get('/items', (req, res) => {
+
+    productModel.find({}, (err, data) => {
+        if (!err) {
+            res.send({
+                message: "got all products successfully",
+                data: data
+            })
+        } else {
+            res.status(500).send({
+                message: "server error"
+            })
+        }
+    });
 })
 
 router.get('/tweet/:id', (req, res) => {
 
     const id = req.params.id;
 
-    tweetModel.findOne({ _id: id }, (err, data) => {
+    productModel.findOne({ _id: id }, (err, data) => {
         if (!err) {
             if (data) {
                 res.send({
@@ -130,7 +190,7 @@ router.get('/tweet/:id', (req, res) => {
 
 router.delete('/tweet/:ids', (req, res) => {
     const id =req.params.ids;
-    tweetModel.deleteOne({
+    productModel.deleteOne({
         _id: id,
         owner: new mongoose.Types.ObjectId(req.body.token._id)
 
@@ -159,13 +219,18 @@ router.delete('/tweet/:ids', (req, res) => {
     
 })
 
-router.put('/tweet/:editId', async (req, res) => {
+router.put('/editName', async (req, res) => {
 
     const body = req.body;
-    const id = req.params.editId;
+    const email = body.email;
+    const firstName = body.updatedFirstName
+    const lastName = body.updatedLastName
 
     if ( // validation
-        !body.text
+        !body.text||
+        !firstName||
+        !lastName
+
      
     ) {
         res.status(400).send({
@@ -175,9 +240,10 @@ router.put('/tweet/:editId', async (req, res) => {
     }
 
     try {
-        let data = await tweetModel.findByIdAndUpdate(id,
+        let data = await userModel.findByIdAndUpdate(email,
             {
-                text: body.text,
+                firstName:firstName
+                
               
             },
             { new: true }

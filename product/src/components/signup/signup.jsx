@@ -148,7 +148,7 @@ function Signup() {
                         }} />
                     <label className="profileImg">Profile Picture</label>
 
-                    <input ref={fifthRef} type="file" required name='profilePic' accept='image/png, image/jpg, image.jpeg'  id='imgInput' onChange={(e) => {
+                    <input required ref={fifthRef} type="file"  name='profilePic' accept='image/png, image/jpg, image.jpeg'  id='imgInput' onChange={(e) => {
                             setImageUpload(e.target.files[0])
                     }}/>
 

@@ -10,7 +10,7 @@ import {
     stringToHash,
     varifyHash,
 } from "bcrypt-inzi"
-import { userModel,otpModel,tweetModel } from './routes/dbmodels.mjs'
+import { userModel,otpModel,productModel } from './routes/dbmodels.mjs'
 import sgMail from "@sendgrid/mail"
 
 
@@ -82,7 +82,7 @@ const getUser = async (req, res) => {
     }
 
     try {
-        const user = await userModel.findOne({ _id: _id }, "email firstName lastName -_id profileImage createdOn password coverPhoto").exec()
+        const user = await userModel.findOne({ _id: _id }, "email firstName lastName _id profileImage createdOn password coverPhoto").exec()
         if (!user) {
             res.status(404).send({})
             return;
@@ -142,24 +142,19 @@ app.post('/api/v1/change-password', async (req, res) => {
 app.post("/api/v1/updateProfileImg", async (req, res) =>{
     try{
         const body = req.body;
-        const _id = req.body.token._id;
         const profileImage = body.profileImage
         const email = req.body.token.email
 
         const user = await userModel.findOne(
-            { _id: _id },
+            { email: email },
             "profileImage",
         ).exec()
 
-        const userTweets = await userModel.findOne(
-            { _id: _id },
-            "profilePhoto",
-        ).exec()
+    
 
-        if (!user && !userTweets) throw new Error("User not found")
+        if (!user) throw new Error("User not found")
         
-        await userModel.updateOne({ _id: _id }, { profileImage: profileImage }).exec()
-        await tweetModel.updateMany({ email: email }, { profilePhoto: profileImage }).exec()
+        await userModel.updateOne({ email: email }, { profileImage: profileImage }).exec()
 
         res.send({
             message: "profile image changed success",
@@ -175,6 +170,39 @@ app.post("/api/v1/updateProfileImg", async (req, res) =>{
 
 
 })
+
+// app.post("/api/v1/updateName", async (req, res) =>{
+//     try{
+//         const body = req.body;
+//         const email = req.body.token.email
+  
+
+
+//         const user = await userModel.findOne(
+//             { email: email },
+//             "firstName lastName",
+//         ).exec()
+
+//         if (!user) throw new Error("User not found")
+        
+//         await userModel.updateOne({ email: email }, { firstName: firstName }).exec()
+//         await userModel.updateOne({ email: email }, { lastName: lastName }).exec()
+
+
+//         res.send({
+//             message: "profile image changed success",
+//         });
+//         return;
+
+//     }
+
+//     catch (error) {
+//         console.log("error: ", error);
+//         res.status(500).send(error.message)
+//     }
+
+
+// })
 
 app.post("/api/v1/uploadCoverPhoto", async (req, res) =>{
     try{

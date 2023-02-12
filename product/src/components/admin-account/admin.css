@@ -1,0 +1,110 @@
+.Sub-div{
+    margin-top: 10px;
+    overflow: hidden;
+}
+.settingHead{
+    text-align: center;
+    color: #075985;
+    font-size: 15px;
+}
+
+.profileImg {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    border-radius: 50%;
+    background-color: #10b981;
+    margin-left: auto;
+    margin-right: auto;
+
+
+}
+
+.nameDiv{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+
+}
+
+.nameDiv p{
+    color: rgba(128, 128, 128, 0.63);
+    font-size: 14px;
+
+
+}
+
+.nameDiv input{
+    width: 100%;
+}
+
+.updateFirstName p{
+    border-bottom: 2px solid rgba(128, 128, 128, 0.747);
+}
+
+.updateLastName p{
+    border-bottom: 2px solid rgba(128, 128, 128, 0.747);
+}
+
+.profileImageDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profileImageDiv button{
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    margin-top: 10px;
+
+}
+.categoryDiv{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.categoryDiv input{
+    width: 100%;
+  
+}
+.categoryDiv button{
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+}
+.showCategoryDiv{
+    overflow-y: scroll;
+    height: calc(25vh);
+}
+
+.options{
+    border: 1px solid #16a34a;
+    padding: 15px;
+    text-transform: capitalize;
+    font-weight: bold;
+    color: #166534;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    border-radius: 10px;
+    margin-top: 5px;
+
+}
+
+.cateHead{
+    font-size: 15px;
+    color: #075985;
+
+}
+.logOut{
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+    background-color: #10b981;
+}
+

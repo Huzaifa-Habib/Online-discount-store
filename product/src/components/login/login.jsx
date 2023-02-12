@@ -44,14 +44,24 @@ function Login() {
           .then((response) => {
             console.log(response);
             event.target.reset();
-            window.location.reload();
-            dispatch({
-              type: 'USER_LOGIN',
-              payload: response.data.profile
-            })
+            if(email === "admin@gmail.com"){
+              dispatch({
+                type: 'ADMIN_LOGIN',
+                payload: response.data.profile
+              })
+              return;
+              
+            }
+            else{
+              dispatch({
+                type: 'USER_LOGIN',
+                payload: response.data.profile
+              })
 
-        
-            
+            }
+
+
+
 
           }, (error) => {
             console.log(error);

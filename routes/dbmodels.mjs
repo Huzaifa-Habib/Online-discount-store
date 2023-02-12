@@ -1,20 +1,18 @@
 import mongoose from "mongoose"
 
 
-let twitterSchema = new mongoose.Schema({
-    text: {type:String, required: true},
+let productSchema = new mongoose.Schema({
+    name: {type:String, required: true},
+    description: {type:String, required: true},
     createdOn: { type: Date, default: Date.now },
-    owner: { type: mongoose.ObjectId, required: true },
-    isDeleted: { type: Boolean, default: false },
-    image: { type: String },
-    ownerName:{ type: String },
-    profilePhoto: { type: String },
-    userFirstName: {type:String},
-    userLastName: {type:String},
-    email:{type:String}
+    image: { type: String,required: true },
+    category: {type:String,required: true},
+    unitName:{type:String,required: true},
+    unitPrice:{type:Number,required: true}
+  
 
 });
-export const tweetModel = mongoose.model('Tweets', twitterSchema);
+export const productModel = mongoose.model('Items', productSchema);
 
 const userSchema = new mongoose.Schema({
     firstName: { type: String },
@@ -24,6 +22,7 @@ const userSchema = new mongoose.Schema({
     profileImage:{type:String},
     coverPhoto:{type:String},
     createdOn: { type: Date, default: Date.now },
+    isAdmin:{type:Boolean, default:false}
 
 });
 export const userModel = mongoose.model('Users', userSchema);
@@ -35,6 +34,11 @@ const otpSchema = new mongoose.Schema({
     createdOn: { type: Date, default: Date.now },
 });
 export const otpModel = mongoose.model('Otps', otpSchema);
+
+const categorySchema = new mongoose.Schema({
+    name: String,
+});
+export const categoryModel = mongoose.model('Categories',categorySchema );
 
 const otpSchemaViaSms = new mongoose.Schema({
     otp: String,

@@ -1,0 +1,142 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
+
+body{
+  margin: 0px;
+  padding: 0px;
+  font-family: 'Roboto', sans-serif;
+  background-color: rgba(128, 128, 128, 0.103);
+  overflow: hidden;
+}
+
+.navBar{
+  display: flex;
+  flex-direction: row;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  padding: 10px;
+
+}
+  
+
+.userInfo{
+  display: flex;
+
+}
+
+.userInfo img{
+  border-radius: 50%;
+  background-color: aquamarine;
+}
+
+.userInfo span{
+  text-transform: capitalize;
+  color: dodgerblue;
+  padding-left: 5px;
+  font-weight: 500;
+
+}
+
+.userInfo p{
+  position: relative;
+  left: -105px;
+  color: rgb(65, 230, 65);
+  top: 2px;
+  font-size: 14px;
+}
+
+.addProductIcon{
+  margin-left: auto;
+  margin-top: 12px;
+}
+.addProductIcon img{
+  cursor: pointer;
+}
+
+.addProductForm input{
+  margin-top: 15px;
+  border-radius: 10px;
+
+}
+
+.addProductForm textarea{
+  margin-top: 15px;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.addProductForm textarea::placeholder{
+  color:rgba(128, 128, 128, 0.486); ;
+}
+
+.addProductForm input::placeholder{
+  color: rgba(128, 128, 128, 0.486);
+}
+.unitName{
+  display: flex;
+}
+.unitName input{
+  width: 40%;
+  margin-left: 20px;
+
+}
+.unitName p{
+  position: relative;
+  top: 5px;
+  color: dodgerblue;
+
+}
+
+.unitPrice p{
+  position: relative;
+  top: 5px;
+  color: dodgerblue;
+
+}
+.unitPrice{
+  display: flex;
+}
+.unitPrice input{
+  width: 40%;
+  margin-left: 20px;
+
+}
+
+.productHead{
+  color: #0c4a6e;
+  font-size: 14px;
+  padding-top: 10px;
+  padding-left: 40px;
+}
+
+
+.product{
+  display: flex;
+  border: 2px solid #239400;
+  height: 100px;
+  width: 100%;
+  border-radius: 10px;
+  align-items: center;
+  margin-top: 30px;
+  padding: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+  
+}
+.item-img{
+  height: 100%;
+  width: 100px;
+  padding-right: 5px;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.settings{
+  padding-top: 10px;
+  margin-left: 10px;
+}
+
+
+
+
+
+

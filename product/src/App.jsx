@@ -12,12 +12,16 @@ import Profile from './components/profile/profile';
 import UpdatePassword from './components/update-pass/update';
 import ForgetPass from './components/forget-pass/forget';
 import ForgetPassWithSms from './components/forget-pass-with-sms/sms';
+import AdminScreen from './components/admin/adminScreen';
+import AdminAccount from './components/admin-account/admin';
+
 
 
 axios.defaults.withCredentials = true
 
 function App() {
   let { state, dispatch } = useContext(GlobalContext);
+  const [userRes, setUserRes] = useState(null)
   console.log(state)
 
   useEffect(() => {
@@ -37,11 +41,23 @@ function App() {
         let response = await axios.get(`${baseUrl}/api/v1/profile`, {
           withCredentials: true
         })
-        console.log("Profile: ", response);
-        dispatch({
-          type: 'USER_LOGIN',
-          payload:response.data
-        })
+        console.log("Profile: ", response.data);
+        if(response.data.email === "admin@gmail.com"){
+          dispatch({
+            type: 'ADMIN_LOGIN',
+            payload: response.data
+          })
+          return
+        }
+
+        else{
+          dispatch({
+            type: 'USER_LOGIN',
+            payload:response.data
+          })
+
+        }
+ 
       } catch (error) {
 
         console.log("axios error: ", error);
@@ -107,11 +123,20 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/Profile" element={<Profile />} />
               <Route path="/update-password" element={<UpdatePassword />} />
+            </Routes>   
+          :
+            null
+        } 
 
-
-
-
-
+        {
+         (state?.isAdmin === true ) ?
+            <Routes>
+              <Route path="/" element={<AdminScreen />} />
+              <Route path="/adminAccount" element={<AdminAccount />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/Profile" element={<Profile />} />
+              <Route path="/update-password" element={<UpdatePassword />} />
             </Routes>   
           :
             null
@@ -119,7 +144,7 @@ function App() {
 
 
         {    
-         (state.isLogin === false) ?
+         (state.isLogin === false || state.isAdmin === false) ?
 
             <Routes>
               <Route path="/" element={<Login />} />
@@ -127,20 +152,15 @@ function App() {
               <Route path="/forget-password" element={<ForgetPass />} />
               <Route path="*" element={<Login/>}/>
               <Route path="/forget-pass-with-sms" element={<ForgetPassWithSms />} />
-
-
-
-
-              
-
             </Routes>   
           :
             null
         }  
          
+       
 
          { 
-         (state.isLogin === null) ?
+         (state.isLogin === null && state?.isAdmin === null) ?
           <div className='loadingScreen'>
               <Spinner animation="border" variant="danger" />
                 <p>Loading...</p>
