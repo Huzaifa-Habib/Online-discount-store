@@ -1,0 +1,272 @@
+.nav-bar{
+    padding-left: 12%;
+    background-color: white;
+    width: 72%;
+    padding-top: 10px;
+    
+
+}
+
+.profile-centre-div{
+    overflow-y: scroll;
+    height: 90vh;
+
+}
+
+.nav-bar h4{
+    font-size: 18px;
+}
+
+.nav-bar p{
+    padding: 0;
+    position: relative;
+    top: -10px;
+    font-weight: 500;
+    color: rgba(128, 128, 128, 0.726);
+    font-size: 14px;
+}
+.profile-sec{
+    padding-left: 10%;
+  
+}
+
+.coverPhoto{
+    background-color: rgba(128, 128, 128, 0.24);
+    width: 70%;
+    height: 230px;
+    
+
+}
+
+
+
+
+
+
+.profilePhoto{
+    margin-left: 20px;
+  
+}
+
+.profilePhoto img{
+    border-radius: 50%;
+    -ms-transform: translateZ(0); /* IE 9 */
+    -webkit-transform: translateZ(0); /* Chrome, Safari, Opera */
+    transform: translateZ(0);
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;         /* Firefox */
+    image-rendering:   -o-crisp-edges;         /* Opera */
+    image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;  /* IE (non-standard property) */
+    border: 4px solid white;
+    position: relative;
+    top: -100px;
+    background-color: white;
+}
+
+.userDetails{
+    position: relative;
+    top: -100px;
+    padding-left: 10px;
+}
+
+
+.userDetails p{
+    line-height: 0px;
+}
+
+.userDetails p:nth-child(1){
+    color: black;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.userDetails p:nth-child(2){
+    color: rgba(128, 128, 128, 0.801);
+    font-weight: 500;
+    font-size: 14px;
+    position: relative;
+    top: -10px;
+}
+.userDetails p:nth-child(3){
+    position: relative;
+    top: -15px;
+}
+
+.userDate{
+    color: gray;
+    font-weight: 500;
+    padding-left: 4px;
+    font-size: 14px;
+}
+
+.profile-posts-div{
+    position: relative;
+    top: -100px;
+
+}
+
+.modifying-div{
+    margin-left: auto;
+}
+
+.modifying-div img{
+    cursor: pointer;
+}
+
+.updateForm textarea{
+    display: block;
+    width: 90%;
+    margin-top: 5px;
+    margin-left: 5px;
+    border: 1px solid rgba(128, 128, 128, 0.247);
+    border-radius: 10px;
+    padding: 5px 5px;
+    resize: none;
+  
+}
+  
+  .updateForm input:focus{
+    outline: 3px solid dodgerblue;
+  }
+  .updateForm textarea:focus{
+    outline: 1px solid dodgerblue;
+  }
+  
+  .updateForm label{
+    font-weight: bold;
+  }
+  
+  .updateBtn{
+    width: 40%;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+  }
+
+
+  .updatePhoto{
+    position: relative;
+    top: -50px !important;
+    left: -60px;
+    border: none !important;
+    background-color: rgba(128, 128, 128, 0.548);
+    padding: 5px !important;
+    cursor: pointer;
+
+  }
+
+  .plus-icon{
+    height: 30px;
+    width: 30px;
+  }
+
+  .modal-body {
+    width: 100% !important;
+    text-align: center;
+  }
+
+  .upload-btn{
+    background-color:rgba(30, 143, 255, 0.192);
+    border-radius: 5px!important;
+    color: dodgerblue;
+    padding: 10px 160px;
+    cursor: pointer;
+  }
+
+  .cover-btn{
+    background-color: white !important;
+    border: 0px !important;
+    float: right;
+    position: relative;
+    top: 150px;
+    margin-right: 20px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    color: #3f3f3f !important;
+    border-radius: 8px !important;
+    cursor: pointer;
+    z-index: 2;
+
+
+
+  }
+
+  .camera-icon{
+    margin-top: 2px;
+    margin-right: 5px;
+
+  }
+
+  .drp-items{
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    width: 40%;
+    margin-left: auto;
+    margin-right: 20px;
+    position: relative;
+    top: -16px;
+    background-color: white;
+    z-index: 2;
+    border-radius: 5px;
+    padding-left: 10px;
+    display: none;
+
+  }
+
+  .drp p {
+    color: white !important;
+    font-size: 15px;
+    padding-left: 12px;
+    cursor: pointer;
+   
+  }
+
+  .menu{
+    width: 28%;
+
+  }
+
+
+
+  .drp-items p:nth-child(3){
+    position: relative;
+    top: -15px;
+  }
+
+  .upload-icon{
+    font-size: 30px;
+    margin-right: 10px;
+    position: relative;
+    bottom: 3px;
+
+  }
+
+
+
+  @media screen and (max-width:800px) {
+    .nav-bar{
+        width: 90%;
+    }
+
+
+    .coverPhoto{
+        width: 90%;
+        height: calc(30vh);
+    }
+    
+  }
+
+  @media screen and (max-width:500px) {
+    .nav-bar{
+        width: 100%;
+    }
+
+
+    .coverPhoto{
+        width: 100%;
+        height: calc(30vh);
+    }
+    
+  }
