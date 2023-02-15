@@ -14,6 +14,8 @@ import ForgetPass from './components/forget-pass/forget';
 import ForgetPassWithSms from './components/forget-pass-with-sms/sms';
 import AdminScreen from './components/admin/adminScreen';
 import AdminAccount from './components/admin-account/admin';
+import AddItem from './components/addItems/add';
+import Test from './components/test/text';
 
 
 
@@ -36,7 +38,6 @@ function App() {
   
 
     const getProfile = async () => {
-
       try {
         let response = await axios.get(`${baseUrl}/api/v1/profile`, {
           withCredentials: true
@@ -59,10 +60,12 @@ function App() {
         }
  
       } catch (error) {
-
         console.log("axios error: ", error);
         dispatch({
           type: 'USER_LOGOUT'
+        })
+        dispatch({
+          type: 'ADMIN_LOGOUT'
         })
       }
 
@@ -97,6 +100,9 @@ function App() {
         dispatch({
           type: 'USER_LOGOUT'
         })
+        dispatch({
+          type: 'ADMIN_LOGOUT'
+        })
       }
       return Promise.reject(error);
     });
@@ -130,9 +136,11 @@ function App() {
 
         {
          (state?.isAdmin === true ) ?
-            <Routes>
+            <Routes >
               <Route path="/" element={<AdminScreen />} />
               <Route path="/adminAccount" element={<AdminAccount />} />
+              <Route path="/addItems" element={<AddItem />} />
+              <Route path="/test" element={<Test />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/Profile" element={<Profile />} />
@@ -144,7 +152,7 @@ function App() {
 
 
         {    
-         (state.isLogin === false || state.isAdmin === false) ?
+         (state.isLogin === false && state.isAdmin === false) ?
 
             <Routes>
               <Route path="/" element={<Login />} />
@@ -163,7 +171,7 @@ function App() {
          (state.isLogin === null && state?.isAdmin === null) ?
           <div className='loadingScreen'>
               <Spinner animation="border" variant="danger" />
-                <p>Loading...</p>
+                <p className='loadTxt'>Loading...</p>
 
           
             

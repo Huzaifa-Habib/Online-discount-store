@@ -1,0 +1,164 @@
+
+.addItemSubDiv{
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-y: scroll;
+    height: calc(90vh);
+    padding-left: 10px;
+
+
+}
+
+.imageInputDiv{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+    background-color: rgba(128, 128, 128, 0.212);
+    width: calc(81vw);
+    border-radius: 5px;
+
+
+}
+
+.addProductForm{
+    margin-top: 20px;
+}
+
+
+.addProductForm input{
+    margin-top: 15px;
+    border-radius: 5px;
+    display: block;
+    border: none;
+    width: 94%;
+    padding: 5px;
+    background-color: rgba(128, 128, 128, 0.212);
+    padding-left: 10px;
+
+}
+
+.addProductForm input:focus{
+    outline: 2px solid dodgerblue;
+    border: none;
+   
+}
+
+  
+
+.addProductForm textarea{
+    margin-top: 15px;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: rgba(128, 128, 128, 0.212);
+    border: none;
+    width: 94%;
+
+}
+
+.addProductForm textarea::placeholder{
+    color: rgba(0, 0, 0, 0.582) ;
+}
+
+.addProductForm input::placeholder{
+    color: rgba(0, 0, 0, 0.582) ;
+
+}
+.unitName{
+    display: flex;  
+}
+.unitName input{
+    width: 60%;
+    margin-left: 25px;
+
+}
+.unitName p{
+    position: relative;
+    top: 20px;
+    color: dodgerblue;
+
+}
+
+.unitPrice p{
+    position: relative;
+    top: 20px;
+    color: dodgerblue;
+
+}
+.unitPrice{
+    display: flex;
+}
+.unitPrice input{
+    width: 60%;
+    margin-left: 30px;
+
+}
+
+.addItemHead{
+    color:#024F9D;
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.addItemBtn{
+  display: flex;
+  flex-direction: column;;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.spinner-div{
+    position: absolute;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.171);
+    height: calc(100vh);
+    width: calc(100vw);
+    top: 0;
+    display: none;
+  
+  
+  
+  }
+  
+  .spinner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    min-height: calc(100vh);
+  }
+
+@media screen and (max-height:800px) {
+    .addItemSubDiv{
+        height: calc(70vh);
+    }
+}
+
+
+@media screen and (max-height:505px) {
+    .addItemSubDiv{
+        height: calc(65vh);
+    }
+   
+}
+
+@media screen and (max-height:430px) {
+    .addItemSubDiv{
+        height: calc(60vh);
+    }
+   
+}
+@media screen and (max-height:370px) {
+    .addItemSubDiv{
+        height: calc(55vh);
+    }
+   
+}
+
+
+
+

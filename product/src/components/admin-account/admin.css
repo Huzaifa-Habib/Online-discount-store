@@ -1,6 +1,28 @@
+
+.admin-main-div{
+    overflow-y: hidden ;
+    height: calc(100vh);
+    width: 100%;
+}
 .Sub-div{
-    margin-top: 10px;
-    overflow: hidden;
+    margin-top: 10px;;
+    overflow-y: scroll;
+    margin-bottom: 20px;
+    height: 85%;
+
+
+
+}
+.footer{
+    height: 15%;
+    margin-bottom: 40px;
+
+}
+
+.bottomNav{
+    padding-bottom: 30px !important;
+
+
 }
 .settingHead{
     text-align: center;
@@ -49,6 +71,7 @@
 
 .profileImageDiv{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -57,29 +80,42 @@
     margin-right: auto;
     border-radius: 10px;
     margin-top: 10px;
+    display: block;
+    padding: 3px 40px;
+    border: none;
+    background-color: #075985;
+    color: white;
 
 }
 .categoryDiv{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     margin-top: 20px;
+    padding-left: 40px;
+    
+    
 }
 
 .categoryDiv input{
-    width: 100%;
+    background-color: rgba(128, 128, 128, 0.226);
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    width: 70%;
+    padding-left: 10px;
   
 }
 .categoryDiv button{
     margin-top: 10px;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 10px;
+    border-radius: 5px;
+    padding: 2px 20px;
+    background-color: #61B846;
+    border: none;
+    color: white;
+    font-weight: 700;
+    margin-left: 10px;
 }
-.showCategoryDiv{
-    overflow-y: scroll;
-    height: calc(25vh);
+
+.feed{
+    padding-bottom: 20px;
 }
 
 .options{
@@ -94,7 +130,9 @@
     border-radius: 10px;
     margin-top: 5px;
 
+
 }
+
 
 .cateHead{
     font-size: 15px;
@@ -102,9 +140,27 @@
 
 }
 .logOut{
+    border-radius: 5px;
+    background-color: #61B846;
+    width: 80%;
+    padding: 15px 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 22px;
+    border-radius: 10px;
+    border: none;
+    display: flex;
     margin-left: auto;
     margin-right: auto;
-    border-radius: 5px;
-    background-color: #10b981;
+    justify-content: center;
+    margin-top: 20px;
+
+}
+.category:last-child{
+    margin-bottom: 20px;
 }
 
+@media screen and (max-height:650px) {
+
+    
+}

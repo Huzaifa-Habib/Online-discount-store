@@ -8,7 +8,7 @@ body{
     
 }
 
-.sub-div{
+.signUp-sub-div{
     margin-left: auto;
     margin-right: auto;
     width: calc(40vw);
@@ -31,7 +31,7 @@ h3{
 }
 
 
-input{
+.submitForm input{
     width: 90%;
     padding: 5px 10px;
     margin-top: 20px;
@@ -62,7 +62,7 @@ input:focus{
 
 }
 
-button{
+.submitForm button{
     display: flex;
     margin-left: auto;
     margin-right: auto;
@@ -110,21 +110,21 @@ button{
     color: white;
   }
 
-  .profileImg{
+  .signUp-profileImg{
     position: relative;
     top: 20px;
     font-weight: bold;
     font-size: 17px;
   }
 
-  .profileImg sup{
+  .signUp-profileImg sup{
     color: gray;
     padding-left: 2px;
   }
 
 
 @media screen and (max-width:800px) {
-    .sub-div{
+    .signUp-sub-div{
         width: calc(50vw) !important;
     }
 
@@ -132,7 +132,7 @@ button{
 }
 
 @media screen and (max-width:650px) {
-    .sub-div{
+    .signUp-sub-div{
         width: calc(70vw) !important;
     }
 
@@ -144,7 +144,7 @@ button{
 }
 
 @media screen and (max-width:450px) {
-    .sub-div{
+    .signUp-sub-div{
         width: calc(80vw) !important;
     }
 
@@ -165,10 +165,10 @@ button{
 
 
 @media screen and (max-width:320px) {
-    .sub-div{
+    .signUp-sub-div{
         width: calc(90vw) !important;
     }
-    button{
+    .submitForm button{
         padding: 5px 20px;
     }
 

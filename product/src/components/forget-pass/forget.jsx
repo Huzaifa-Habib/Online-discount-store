@@ -75,7 +75,7 @@ function ForgetPass() {
 
                 </div>     
             </nav>
-          <div className="sub-div">
+          <div className="forget-sub-div">
 
 
           

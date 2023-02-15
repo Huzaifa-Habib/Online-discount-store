@@ -15,17 +15,15 @@ let productSchema = new mongoose.Schema({
 export const productModel = mongoose.model('Items', productSchema);
 
 const userSchema = new mongoose.Schema({
-    firstName: { type: String },
-    lastName: { type: String },
+    fullName: { type: String },
     email: { type: String, required: true },
     password: { type: String, required: true },
     profileImage:{type:String},
     coverPhoto:{type:String},
     createdOn: { type: Date, default: Date.now },
-    isAdmin:{type:Boolean, default:false}
 
 });
-export const userModel = mongoose.model('Users', userSchema);
+export const userModel = mongoose.model('Store Users', userSchema);
 
 const otpSchema = new mongoose.Schema({
     otp: String,

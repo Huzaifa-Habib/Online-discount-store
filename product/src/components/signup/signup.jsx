@@ -23,19 +23,11 @@ function Signup() {
     const thirdRef = useRef(null);
     const fourthRef = useRef(null);
     const fifthRef = useRef(null);
-    const [firstName,setFirstName] =useState ("") 
-    const [lastName,setLastName] =useState ("") 
+    const [fullName,setFullName] =useState ("") 
     const [email,setEmail] =useState ("") 
     const [password,setPassword] =useState ("") 
     let navigate = useNavigate();
     const [imageUpload,setImageUpload] =useState (null) 
-
-
-
-
-
-
-
 
 
     const signUpHandler = (event)=>{
@@ -43,27 +35,59 @@ function Signup() {
         let errorDiv = document.getElementById("error")
         let alertDiv = document.getElementById("alert")
 
-        let imageRef = ref(storage,`profileImages/${imageUpload?.name + v4()}`);
+        if(imageUpload !== null){
 
-    uploadBytes(imageRef, imageUpload).then((snapshot) =>{
-      console.log("Firebase Storage",snapshot)
+            let imageRef = ref(storage,`profileImages/${imageUpload?.name + v4()}`);
+            uploadBytes(imageRef, imageUpload).then((snapshot) =>{
+            console.log("Firebase Storage",snapshot)
 
-      getDownloadURL(snapshot.ref)
-      .then((url) =>{
-        console.log("ImageURL", url)
+                getDownloadURL(snapshot.ref)
+                .then((url) =>{
+                    console.log("ImageURL", url)
+                        axios.post(`${baseUrl}/api/v1/signup`, {
+                            fullName: fullName,   
+                            email:email,
+                            password:password,
+                            profileImage:url
+                        })
+
+                        .then((response) => {
+                            console.log(response);
+                            event.target.reset();
+                            navigate("/")
+                            
+
+                        }, (error) => {
+                            console.log(error);
+                            alertDiv.style.display = "block"
+                            errorDiv.textContent = error?.response?.data?.message
+                        });
+
+                    })
+                    .catch((e) =>{
+                        console.log("Image Url Error", e)
+                
+                    })
+                
+                })
+                .catch((e) =>{
+                console.log("Storage Error", e)
+
+                })
+        }
+
+        else{
             axios.post(`${baseUrl}/api/v1/signup`, {
-                firstName: firstName,
-                lastName: lastName,
+                fullName: fullName,   
                 email:email,
                 password:password,
-                profileImage:url
+                profileImage:""
             })
 
             .then((response) => {
                 console.log(response);
                 event.target.reset();
                 navigate("/")
-                
 
             }, (error) => {
                 console.log(error);
@@ -71,23 +95,7 @@ function Signup() {
                 errorDiv.textContent = error?.response?.data?.message
             });
 
-        })
-        .catch((e) =>{
-            console.log("Image Url Error", e)
-    
-        })
-    
-    })
-    .catch((e) =>{
-      console.log("Storage Error", e)
-
-    })
-
-      
-
-        
-      
-
+        }
 
 
     }
@@ -122,20 +130,13 @@ function Signup() {
             </div>
 
 
-            <div className='sub-div'>
+            <div className='signUp-sub-div'>
                 <h3>Register Yourself</h3>
-                <form onSubmit={signUpHandler}>
-                    <div className="name-div">
-                        <input ref={firstRef} type="text" placeholder="First Name" required onChange={(e) =>{
-                            setFirstName(e.target.value)
+                <form onSubmit={signUpHandler} className = "submitForm">
+                    <input ref={firstRef} type="text" placeholder="Enter Full Name" required onChange={(e) =>{
+                        setFullName(e.target.value)
 
-                        }} />
-                        <input ref={secondRef} type="text" placeholder="last Name" required onChange={(e) =>{
-                            setLastName(e.target.value)
-
-                        }} />
-
-                    </div>
+                    }} />
 
                     
                     <input ref={thirdRef} className="mail-input" type="email" placeholder="Enter Email" required onChange={(e) =>{
@@ -146,9 +147,9 @@ function Signup() {
                             setPassword(e.target.value)
 
                         }} />
-                    <label className="profileImg">Profile Picture</label>
+                    <label className="signUp-profileImg">Profile Picture</label>
 
-                    <input required ref={fifthRef} type="file"  name='profilePic' accept='image/png, image/jpg, image.jpeg'  id='imgInput' onChange={(e) => {
+                    <input ref={fifthRef} type="file"  name='profilePic' accept='image/png, image/jpg, image.jpeg'  id='imgInput' onChange={(e) => {
                             setImageUpload(e.target.files[0])
                     }}/>
 

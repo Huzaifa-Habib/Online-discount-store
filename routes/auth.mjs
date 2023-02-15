@@ -26,16 +26,15 @@ router.post("/signup", (req, res) => {
 
     let body = req.body;
 
-    if (!body.firstName
-        || !body.lastName
+
+    if (!body.fullName
         || !body.email
         || !body.password
     ) {
         res.status(400).send(
             `required fields missing, request example: 
                 {
-                    "firstName": "John",
-                    "lastName": "Doe",
+                    "fullName": "John Doe",
                     "email": "abc@abc.com",
                     "password": "12345"
                 }`
@@ -43,7 +42,8 @@ router.post("/signup", (req, res) => {
         return;
     }
 
-    req.body.email = req.body.email.toLowerCase();
+    body.email = body.email.toLowerCase();
+    body.fullName = body.fullName.toLowerCase();
 
     // check if user already exist // query email user
     userModel.findOne({ email: body.email }, (err, user) => {
@@ -61,8 +61,7 @@ router.post("/signup", (req, res) => {
                 stringToHash(body.password).then(hashString => {
 
                     userModel.create({
-                        firstName: body.firstName,
-                        lastName: body.lastName,
+                        fullName: body.fullName,
                         email: body.email,
                         profileImage:body?.profileImage,
                         password: hashString
@@ -92,7 +91,6 @@ router.post("/signup", (req, res) => {
 router.post("/login", (req, res) => {
 
     let body = req.body;
-    body.email = body.email.toLowerCase();
     body.password = body.password
 
     if (!body.email || !body.password) { // null check - undefined, "", 0 , false, null , NaN
@@ -164,7 +162,7 @@ router.post("/login", (req, res) => {
     // check if user exist
     userModel.findOne(
         { email: body.email },
-        "firstName lastName email password profileImage isAdmin ",
+        "fullName email password profileImage  ",
         (err, data) => {
             if (!err) {
                 console.log("data: ", data);

@@ -8,7 +8,7 @@ body{
     
 }
 
-.sub-div{
+.logIn-sub-div{
     margin-left: auto;
     margin-right: auto;
     width: calc(40vw);
@@ -31,7 +31,7 @@ h3{
 }
 
 
-input{
+.loginForm input{
     width: 90%;
     padding: 5px 10px;
     margin-top: 20px;
@@ -41,14 +41,14 @@ input{
  
 }
 
-input::placeholder{
+.loginForm input::placeholder{
     color: #27272a;
     text-transform: capitalize;
   
 
 }
 
-input:focus{
+.loginForm input:focus{
     outline: 2px solid dodgerblue;
 }
 
@@ -56,7 +56,7 @@ input:focus{
     margin-top: 20px;
 }
 
-button{
+.loginForm button{
     display: flex;
     margin-left: auto;
     margin-right: auto;
@@ -104,4 +104,60 @@ button{
     padding: 1px 40px;
     font-size: 16px;
     margin-top: 20px;
+}
+
+
+@media screen and (max-width:800px) {
+    .logIn-sub-div{
+        width: calc(50vw) !important;
+    }
+
+
+}
+
+@media screen and (max-width:650px) {
+    .logIn-sub-div{
+        width: calc(70vw) !important;
+    }
+
+    .error-div{
+        width: calc(60vw);
+    }
+
+
+}
+
+@media screen and (max-width:450px) {
+    .logIn-sub-div{
+        width: calc(80vw) !important;
+    }
+
+    .name-div input{
+        width: 90%;
+    }
+
+    .name-div input:nth-child(2){
+        margin-left: 0px;
+        
+    }
+
+    .error-div{
+        width: calc(80vw);
+    }
+
+}
+
+
+@media screen and (max-width:320px) {
+    .signUp-sub-div{
+        width: calc(90vw) !important;
+    }
+    .loginForm button{
+        padding: 5px 20px;
+    }
+
+    .error-div{
+        width: calc(90vw);
+    }
+
 }

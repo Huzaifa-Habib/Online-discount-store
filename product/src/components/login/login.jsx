@@ -104,9 +104,9 @@ function Login() {
 
           </div>
 
-            <div className='sub-div'>
+            <div className='logIn-sub-div'>
                 <h3>Login to Your account</h3>
-                <form onSubmit={loginHandler}>
+                <form onSubmit={loginHandler} className = "loginForm">
                     <input ref={firstRef} className="mail-input" type="email" placeholder="Enter Email" required onChange={(e) =>{
                             setEmail(e.target.value)
 

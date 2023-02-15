@@ -5,9 +5,11 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@headlessui/react": "^1.7.10",
+    "@heroicons/react": "^2.0.15",
     "@mui/icons-material": "^5.11.0",
-    "@mui/material": "^5.11.5",
-    "@mui/styled-engine-sc": "^5.11.0",
+    "@mui/material": "^5.11.9",
+    "@mui/styled-engine-sc": "^5.11.9",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -18,11 +20,14 @@
     "firebase": "^9.15.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
+    "react-custom-scroll": "^5.0.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
     "react-infinite-scroller": "^1.2.6",
     "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
+    "react-scroll-element": "^3.0.1",
+    "react-scrollable-feed": "^1.3.2",
     "styled-components": "^5.3.6",
     "web-vitals": "^2.1.4"
   },
@@ -49,5 +54,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.2.6"
   }
 }
