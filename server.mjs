@@ -171,38 +171,34 @@ app.post("/api/v1/updateProfileImg", async (req, res) =>{
 
 })
 
-// app.post("/api/v1/updateName", async (req, res) =>{
-//     try{
-//         const body = req.body;
-//         const email = req.body.token.email
-  
+app.post("/api/v1/updateName", async (req, res) => {
+    try{
+        const body = req.body;
+        const _id = req.body.token._id;
+        const updatedFullName = req.body.updatedName
+        const user = await userModel.findOne(
+            { _id: _id  },
+            "fullName ",
+        ).exec()
 
-
-//         const user = await userModel.findOne(
-//             { email: email },
-//             "firstName lastName",
-//         ).exec()
-
-//         if (!user) throw new Error("User not found")
+        if (!user) throw new Error("User not found")
         
-//         await userModel.updateOne({ email: email }, { firstName: firstName }).exec()
-//         await userModel.updateOne({ email: email }, { lastName: lastName }).exec()
+        await userModel.updateOne({ _id: _id }, { fullName: updatedFullName }).exec()
+        res.send({ message: "Update Name successful" });
+        return
+
+    }
+
+    catch (error){
+        res.status(500).send({
+            message: error.message
+        })
+
+    }
+
+})
 
 
-//         res.send({
-//             message: "profile image changed success",
-//         });
-//         return;
-
-//     }
-
-//     catch (error) {
-//         console.log("error: ", error);
-//         res.status(500).send(error.message)
-//     }
-
-
-// })
 
 app.post("/api/v1/uploadCoverPhoto", async (req, res) =>{
     try{

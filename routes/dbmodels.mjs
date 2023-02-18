@@ -12,6 +12,7 @@ let productSchema = new mongoose.Schema({
   
 
 });
+productSchema.index({ name: 'text' });
 export const productModel = mongoose.model('Items', productSchema);
 
 const userSchema = new mongoose.Schema({

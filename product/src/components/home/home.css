@@ -1,0 +1,171 @@
+.main {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+}
+  
+.topNavbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding-left: 10px;
+    background-color: white !important;
+}
+.homeLogo h3{
+    text-transform: uppercase;
+    color: #61B846;
+}
+.cartIcon{
+    margin-left: auto;
+    margin-top: 12px;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+
+.content {
+    position: absolute;
+    top: 50px;
+    bottom: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.child1 {
+    flex: 0;
+}
+
+.child2 {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    height: 100%;
+}
+
+.child2a {
+    height: 50px;
+}
+.searchInput:focus{
+    box-shadow: none !important;
+    border: none !important;
+
+}
+
+
+.child2b {
+    flex: 0;
+    padding: 10px 10px 20px 10px;
+    margin-top: 20px;
+
+}
+
+
+.home-feed{
+    display: flex;
+    overflow-x: scroll;
+    justify-content: space-between;
+}
+
+.home-options{
+    border: 2px solid #61B846;
+    padding: 5px 20px;
+    text-transform: capitalize;
+    color: dodgerblue;
+    font-weight: 700;
+    border-radius: 10px;
+    margin-left: 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+
+.child2c {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+/* .homeProduct{
+    display: flex;
+    border: 2px solid #65BD50;
+    height: 100px;
+    width: 100%;
+    border-radius: 10px;
+    align-items: center;
+    margin-top: 10px;
+    padding: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    
+} */
+
+.scrollable-content {
+    height: 100%;
+
+}
+
+.card {
+    width: 300px;
+    height: auto;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+  
+.card-img img {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+
+}
+  
+.card-body {
+    padding: 20px;
+}
+  
+.card-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    color: #c0392b;
+    text-transform: capitalize;
+}
+
+.card-description {
+    font-size: 16px;
+    margin: 10px 0;
+    color: #7f8c8d;
+    text-transform: capitalize;
+
+}
+
+.card-price {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #27ae60;
+}
+
+.card-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #2980b9;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.card-button:hover {
+    background-color: #1e6091;
+}

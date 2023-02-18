@@ -45,29 +45,46 @@
 
 .nameDiv{
     display: flex;
-    justify-content: space-around;
+    flex-direction: row;
+    justify-content: center;
     margin-top: 20px;
+    margin-bottom: 20px;
 
 }
-
-.nameDiv p{
-    color: rgba(128, 128, 128, 0.63);
-    font-size: 14px;
-
+.updateNameDiv{
+    display: flex;
+    color: #D4D3D3;
+    border-bottom: 2px solid #D4D3D3 ;
+    
 
 }
 
 .nameDiv input{
-    width: 100%;
+    text-transform: capitalize;
+    background: none !important;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #b4b4b4;
+    color: dodgerblue;
+
+
 }
 
-.updateFirstName p{
-    border-bottom: 2px solid rgba(128, 128, 128, 0.747);
+
+
+.nameDiv input:focus{
+    outline: none;
+
 }
 
-.updateLastName p{
-    border-bottom: 2px solid rgba(128, 128, 128, 0.747);
+.updateInputDiv form{
+    display: flex;
+    border-bottom: 2px solid #D4D3D3 ;
+
 }
+
+
 
 .profileImageDiv{
     display: flex;
@@ -142,25 +159,21 @@
 .logOut{
     border-radius: 5px;
     background-color: #61B846;
-    width: 80%;
-    padding: 15px 20px;
+    padding: 8px 60px;
     color: white;
     font-weight: bold;
-    font-size: 22px;
+    font-size: 18px;
     border-radius: 10px;
     border: none;
     display: flex;
     margin-left: auto;
     margin-right: auto;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 
 }
 .category:last-child{
     margin-bottom: 20px;
 }
 
-@media screen and (max-height:650px) {
-
-    
-}

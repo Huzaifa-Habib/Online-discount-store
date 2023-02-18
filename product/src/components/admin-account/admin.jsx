@@ -9,8 +9,8 @@ import { GlobalContext } from '../../context/context';
 import { storage } from '../../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {v4} from "uuid"
-import {BiLogOut} from "react-icons/bi"
 import {FaUserAlt} from "react-icons/fa"
+import {AiOutlineCheck} from "react-icons/ai"
 import {AiOutlineHome, AiFillCamera} from "react-icons/ai"
 import {MdAddCircle} from "react-icons/md"
 import BottomNavigation from '@mui/material/BottomNavigation';
@@ -29,6 +29,11 @@ function AdminAccount () {
     const [getCategories, setgetCategories] = useState([])
     const [isSpinner, setIsSpinner] = useState(null)
     const [value, setValue] = React.useState(0);
+    const [isUpdateName, setIsUpdateName] = useState(false)
+    const [updatedNameValue, setUpdateNameValue] = useState(null)
+
+
+
 
 
     if (isSpinner === true) {
@@ -118,22 +123,42 @@ function AdminAccount () {
         getCategoriesHandler()
       },[])
 
-      const logOutHandler = () =>{
-        axios.get(`${state?.baseUrl}/api/v1/logout`,{
-            withCredentials: true
-          })
-      
-          .then((response) => {
-            console.log(response);
-                dispatch({
-                    type: 'ADMIN_LOGOUT',
-                    payload: null
-                  })
-        
-          }, (error) => {
-            console.log(error);
-          });
-      }
+    const logOutHandler = async () =>{
+        setIsSpinner(true)
+        try {
+        const resp  = await axios.post(`${state?.baseUrl}/api/v1/logout`,{},{ withCredentials: true})
+        console.log("Logout", resp)  
+        setIsSpinner(false)
+            dispatch({
+                type: 'ADMIN_LOGOUT',
+                payload: null
+            })   
+        } catch (error) {
+            console.log("logout Error",error);
+        }
+    }
+
+    const updateAdminName = async (e) =>{
+        e.preventDefault()
+        console.log(updatedNameValue)
+
+        if (updatedNameValue !== null) {
+            setIsSpinner(true)
+            try {
+                const resp = await axios.post(`${state?.baseUrl}/api/v1/updateName`,{
+                    updatedName:updatedNameValue
+                },{ withCredentials: true})
+                 console.log("Name updated sucessfully", resp)   
+                 setIsSpinner(false)
+                 window.location.reload()
+
+                } catch (error) {
+                    setIsSpinner(false)
+                    console.log("Update Name Error",error);
+                }
+        }
+           
+    }
 
   
 
@@ -151,6 +176,38 @@ function AdminAccount () {
                 <h5 className='settingHead'>Settings</h5>
                   <img className="profileImg" src={(state?.user?.profileImage !== "")? state?.user?.profileImage : "https://img.icons8.com/color/1x/administrator-male.png"} height = "100" width="100"/>
                 <div className='nameDiv'>
+                    {
+                        (isUpdateName)?
+                        <div className='updateInputDiv' tabIndex="0" >
+                            <form onSubmit={updateAdminName} >
+                                <input required type="text" defaultValue={state?.user?.fullName} autoFocus  onChange = {(e) =>{
+                                    setUpdateNameValue(e.target.value)
+
+                                }} />
+                                <button type='submit'><AiOutlineCheck style={{
+                                                        fontSize:"20px",
+                                                        color:"#61B846",
+                                                        marginLeft:"10px",
+                                                        marginTop:"2px",
+                                                        cursor:"pointer"}}/>
+                                </button>
+                            </form>
+
+                        </div>
+                            
+                        :
+                        <div className='updateNameDiv' tabIndex="0" onFocus={() =>setIsUpdateName(true)} >
+                            Update Full Name <span><AiOutlineCheck style={{
+                                                        fontSize:"20px",
+                                                        color:"#61B846",
+                                                        marginLeft:"10px",
+                                                        marginTop:"2px",
+                                                        cursor:"pointer"}}/>
+                                            </span>
+                        </div>
+                       
+                        
+                    }
                     
                 </div>
                 <div className='profileImageDiv'>
@@ -195,6 +252,7 @@ function AdminAccount () {
                          :<h3>No Products</h3>
                         } 
                     </div>
+                    <button className='logOut' onClick={logOutHandler}>Log Out</button>
 
             </div>
 

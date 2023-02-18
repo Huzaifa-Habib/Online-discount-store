@@ -24,7 +24,6 @@ function AdminScreen() {
   const [isSpinner, setIsSpinner] = useState(null)
   let navigate = useNavigate();
   let { state, dispatch } = useContext(GlobalContext);
-  const [show, setShow] = useState(false);
   const [value, setValue] = React.useState(0);
 
 

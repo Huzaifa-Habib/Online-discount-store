@@ -15,7 +15,6 @@ import ForgetPassWithSms from './components/forget-pass-with-sms/sms';
 import AdminScreen from './components/admin/adminScreen';
 import AdminAccount from './components/admin-account/admin';
 import AddItem from './components/addItems/add';
-import Test from './components/test/text';
 
 
 
@@ -129,6 +128,7 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/Profile" element={<Profile />} />
               <Route path="/update-password" element={<UpdatePassword />} />
+
             </Routes>   
           :
             null
@@ -140,7 +140,6 @@ function App() {
               <Route path="/" element={<AdminScreen />} />
               <Route path="/adminAccount" element={<AdminAccount />} />
               <Route path="/addItems" element={<AddItem />} />
-              <Route path="/test" element={<Test />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/Profile" element={<Profile />} />

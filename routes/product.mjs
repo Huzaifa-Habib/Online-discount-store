@@ -117,6 +117,9 @@ router.get('/categories', (req, res) => {
 })
 
 
+
+
+
 // router.get('/items', (req, res) => {
 //     const productId = new mongoose.Types.ObjectId(req.body.token._id);
 
@@ -148,21 +151,69 @@ router.get('/categories', (req, res) => {
  
 // })
 
-router.get('/items', (req, res) => {
+router.get('/items', async (req, res) => {
 
-    productModel.find({}, (err, data) => {
-        if (!err) {
-            res.send({
-                message: "got all products successfully",
-                data: data
-            })
+    try {
+        const q = req.query.q;
+        console.log("q: ", q);
+
+        let query;
+
+        if (q) {
+            query = productModel.find({ $text: { $search: q } })
         } else {
-            res.status(500).send({
-                message: "server error"
-            })
+            query = productModel.find({})
         }
-    });
+
+        const products = await query.exec();
+
+        // const modifiedProductList = products.map(eachProduct => {
+
+        //     let product = {
+        //         _id: eachProduct._id,
+        //         name: eachProduct.name,
+        //         image:eachProduct.image,
+        //         unitName:eachProduct.unitName,
+        //         unitPrice:eachProduct.unitPrice,
+        //         category:eachProduct.category,
+        //         description:eachProduct.description,
+        //     }
+        // })
+
+        res.send(products);
+
+    } catch (e) {
+        console.log("Error: ", e);
+        res.send([]);
+    }
 })
+
+// router.get('/item/:itemName', async (req, res) => {
+//     let itemName = req.query.itemName
+//     if(itemName === null) return
+//     try {
+//         const item = await productModel.find({ name: itemName }).exec()
+//         if (!item) {
+//             res.status(404).send({})
+//             return;
+//         } else {
+//             res.status(200).send(user)
+//         }
+
+
+        
+//     } catch (error) {
+//         console.log("error: ", error);
+//         res.status(500).send({
+//             message: "something went wrong on server",
+//         });
+   
+//     }
+
+   
+// })
+
+
 
 router.get('/tweet/:id', (req, res) => {
 
