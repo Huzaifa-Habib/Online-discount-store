@@ -87,7 +87,7 @@ function AdminScreen() {
     <div className='main-div'>
       <div className='spinner-div'>
         <div className='spinner'>
-        <Spinner animation="grow" variant="danger" />
+          <Spinner animation="grow" variant="danger" />
         </div>
       </div>
       <div className='subDiv'>

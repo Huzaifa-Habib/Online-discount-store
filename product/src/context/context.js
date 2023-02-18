@@ -7,7 +7,7 @@ let data = {
   isLogin: null,
   isAdmin:null,
   baseUrl: (window.location.href.split(":")[0] === "http")?"http://localhost:3000":null,
-  user:{}
+  user:{},
 }
 
 export default function ContextProvider({ children }) {

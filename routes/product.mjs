@@ -1,5 +1,5 @@
 import express from 'express';
-import {productModel,userModel,categoryModel } from './dbmodels.mjs'
+import {productModel,userModel,categoryModel, cartModel } from './dbmodels.mjs'
 import mongoose from 'mongoose';
 
 const router = express.Router()
@@ -188,33 +188,61 @@ router.get('/items', async (req, res) => {
     }
 })
 
-// router.get('/item/:itemName', async (req, res) => {
-//     let itemName = req.query.itemName
-//     if(itemName === null) return
-//     try {
-//         const item = await productModel.find({ name: itemName }).exec()
-//         if (!item) {
-//             res.status(404).send({})
-//             return;
-//         } else {
-//             res.status(200).send(user)
-//         }
 
+router.post('/cart', async (req, res) => {
+    try {
+      const { userId, product, quantity } = req.body;
+  
+      const cartItem = await cartModel.findOne({ userId, product });
+  
+      if (cartItem) {
+        // If the cart item already exists, update the quantity
+        cartItem.quantity += quantity;
+        await cartItem.save();
+      } else {
+        // If the cart item doesn't exist, create a new one
+           await cartModel.create({ userId, product, quantity });
+      }
+  
+      res.status(201).send({ success: true });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({ success: false, error });
+    }
+})
 
-        
-//     } catch (error) {
-//         console.log("error: ", error);
-//         res.status(500).send({
-//             message: "something went wrong on server",
-//         });
+router.get('/cart/:userId', async (req, res) => {
+    try {
+      const cart = await cartModel.find({ userId: req.params.userId},"product")
+      res.json(cart);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Define a route to delete a cart item by matching the product id
+router.delete('/cart/:productId', async (req, res) => {
+    try {
+      const productId = req.params.productId;
+      const cartItem = await cartModel.findOne({ 'product._id': productId });
+  
+      if (!cartItem) {
+        return res.status(404).json({ message: 'Cart item not found' });
+      }
+  
+      // If the cart only has one product, delete the whole cart
+        await cartModel.deleteOne({ _id: cartItem._id });
+        return res.json({ message: 'Cart deleted successfully' });
+  
+      // If the cart has more than one product, remove the specified product from the cart
    
-//     }
-
-   
-// })
-
-
-
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+  
 router.get('/tweet/:id', (req, res) => {
 
     const id = req.params.id;

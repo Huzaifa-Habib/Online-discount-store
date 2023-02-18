@@ -19,7 +19,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 
 
-function Test (){
+function Home (){
     let { state, dispatch } = useContext(GlobalContext);
     const [isSpinner, setIsSpinner] = useState(null)
     const [getAllCategories, setGetAllCategories] = useState([])
@@ -27,10 +27,11 @@ function Test (){
     const [allData,setAllData] =useState ([]) 
     const [value, setValue] = React.useState(0);
     const [searchTerm, setSearchTerm] = useState("");
+
     if (isSpinner === true) {
         document.querySelector(".spinner-div").style.display = "block"
       
-      }
+    }
   
     if (isSpinner === false) {
         document.querySelector(".spinner-div").style.display = "none"
@@ -58,22 +59,21 @@ function Test (){
         }
     }
 
-  //   const getProductByName= async ()=>{
-  //     if (searchTerm !==  null){
-  //       setIsSpinner(true)
-  //       try {
-  //           const response = await axios.get(`${state?.baseUrl}/api/v1/items?q=${searchTerm}`)
-  //           console.log("Product",response.data)
-  //             setAllData(response.data.data)
-  //             allProductsHandler()
-  //             setIsSpinner(false)
-        
-  //       } catch (error) {
-  //           console.log("error in getting all tweets", error);
-  //           setIsSpinner(false)
-  //       }
-  //   }
-  // }
+    const addToCarts = async (product) => {
+        try {
+            const response = await axios.post(`${state?.baseUrl}/api/v1/cart`, {
+              userId:state.user._id,
+              product,
+              quantity:1
+            });
+      
+            console.log(response.data);
+          } catch (error) {
+            console.log(error);
+          }
+     
+    }
+
     
     useEffect(() => {
         getCategoriesHandler()
@@ -209,7 +209,7 @@ function Test (){
                                             <h2 className="card-title">{eachProduct.name}</h2>
                                             <p className="card-description">{eachProduct.description}</p>
                                             <p className="card-price">Rs.{eachProduct.unitPrice} - per {eachProduct.unitName}</p>
-                                            <p href="#" className="card-button">Add to Cart</p>
+                                            <p className="card-button" onClick={() => addToCarts(eachProduct)}>Add to Cart</p>
                                         </div>
                                     </div>
                                                                     
@@ -256,4 +256,4 @@ function Test (){
 
 }
 
-export default Test
+export default Home

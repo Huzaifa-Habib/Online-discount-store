@@ -15,6 +15,15 @@ let productSchema = new mongoose.Schema({
 productSchema.index({ name: 'text' });
 export const productModel = mongoose.model('Items', productSchema);
 
+const cartSchema = new mongoose.Schema({
+    userId: String,
+    product: Object,
+    quantity: Number,
+    
+});
+export const cartModel = mongoose.model('userCart', cartSchema);
+
+
 const userSchema = new mongoose.Schema({
     fullName: { type: String },
     email: { type: String, required: true },
@@ -25,6 +34,7 @@ const userSchema = new mongoose.Schema({
 
 });
 export const userModel = mongoose.model('Store Users', userSchema);
+
 
 const otpSchema = new mongoose.Schema({
     otp: String,
@@ -55,6 +65,7 @@ export const otpModelViaSms = mongoose.model('Otps-with-SMS', otpSchemaViaSms);
 mongoose.connection.on('connected', function () {//connected
     console.log("Mongoose is connected");
 });
+
 
 mongoose.connection.on('disconnected', function () {//disconnected
     console.log("Mongoose is disconnected");

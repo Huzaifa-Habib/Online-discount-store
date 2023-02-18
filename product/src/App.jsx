@@ -15,6 +15,7 @@ import ForgetPassWithSms from './components/forget-pass-with-sms/sms';
 import AdminScreen from './components/admin/adminScreen';
 import AdminAccount from './components/admin-account/admin';
 import AddItem from './components/addItems/add';
+import Cart from './components/cart/cart';
 
 
 
@@ -123,7 +124,8 @@ function App() {
          {
          (state?.isLogin === true) ?
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Home />} />   
+              <Route path="/cart" element={<Cart />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/Profile" element={<Profile />} />
