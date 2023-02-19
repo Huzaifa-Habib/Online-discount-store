@@ -3,7 +3,7 @@
     flex-direction: column;
     height: 100vh;
   }
-  
+
   .top-navbar {
     display: flex;
     justify-content: space-between;
@@ -41,9 +41,6 @@
 
   .cartItemsDesc{
     display: flex;
-
-
-
   }
   
   .bottom-navbar {

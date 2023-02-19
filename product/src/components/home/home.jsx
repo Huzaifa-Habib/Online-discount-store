@@ -10,13 +10,15 @@ import Carousel from 'react-bootstrap/Carousel';
 import {BsCart4,BsSearch} from "react-icons/bs"
 import {FaUserAlt} from "react-icons/fa"
 import {BiPlus} from "react-icons/bi"
-import {AiOutlineHome, AiFillCamera} from "react-icons/ai"
+import {AiOutlineHome, AiFillCamera, AiOutlineCloseCircle} from "react-icons/ai"
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Paper from '@mui/material/Paper';
 import * as React from 'react';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import Toast from 'react-bootstrap/Toast';
+
 
 
 function Home (){
@@ -27,6 +29,10 @@ function Home (){
     const [allData,setAllData] =useState ([]) 
     const [value, setValue] = React.useState(0);
     const [searchTerm, setSearchTerm] = useState("");
+    const [error, setError] = useState("");
+    const [show, setShow] = useState(null);
+
+
 
     if (isSpinner === true) {
         document.querySelector(".spinner-div").style.display = "block"
@@ -36,6 +42,22 @@ function Home (){
     if (isSpinner === false) {
         document.querySelector(".spinner-div").style.display = "none"
     }
+
+    if (show === true) {
+        document.querySelector(".notificationView").style.display = "block"
+      
+    }
+
+    if (show === false) {
+        document.querySelector(".notificationView").style.display = "none"
+      
+    }
+
+  
+  
+  
+
+
     const getCategoriesHandler = async () =>{
         try {
             const response = await axios.get(`${state?.baseUrl}/api/v1/categories`)
@@ -60,6 +82,7 @@ function Home (){
     }
 
     const addToCarts = async (product) => {
+   
         try {
             const response = await axios.post(`${state?.baseUrl}/api/v1/cart`, {
               userId:state.user._id,
@@ -69,7 +92,9 @@ function Home (){
       
             console.log(response.data);
           } catch (error) {
-            console.log(error);
+            setShow(true)
+            console.log(error.response);
+            setError(error.response.data.message)
           }
      
     }
@@ -87,6 +112,13 @@ function Home (){
                 <Spinner animation="grow" variant="danger" />
                 </div>
             </div>
+            <div className='notificationView' >
+                <div className="notification">
+                    <AiOutlineCloseCircle style={{marginLeft:"auto",cursor:"pointer",fontSize:"18px",position:"relative",top:"-10px",right:"-10px"} }onClick= {() => setShow(false)}/>
+                    <p className="notification-message">{error} !</p>
+                </div> 
+            </div>
+
             <nav className="topNavbar">
                 <div className='homeLogo'>
                     <h3>Online Store</h3>
@@ -241,7 +273,7 @@ function Home (){
                 }}
                 >
                     <BottomNavigationAction style={{color:"#61B846"}} href='/' label="Home" icon={<AiOutlineHome />} />
-                    <BottomNavigationAction style={{color:"#6D6E71"}} href='/cartScreen' label="Cart" icon={<BsCart4/>} />
+                    <BottomNavigationAction style={{color:"#6D6E71"}} href='/cart' label="Cart" icon={<BsCart4/>} />
                     <BottomNavigationAction style={{color:"#6D6E71"}} href='/adminAccount' label="Account" icon={<FaUserAlt />} />
                 </BottomNavigation>
             </Paper>

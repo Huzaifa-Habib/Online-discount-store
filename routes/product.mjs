@@ -197,8 +197,9 @@ router.post('/cart', async (req, res) => {
   
       if (cartItem) {
         // If the cart item already exists, update the quantity
-        cartItem.quantity += quantity;
-        await cartItem.save();
+        // cartItem.quantity += quantity;
+        res.status(400).send({ message: "Item is already in the Cart" });
+        return;
       } else {
         // If the cart item doesn't exist, create a new one
            await cartModel.create({ userId, product, quantity });
@@ -213,7 +214,7 @@ router.post('/cart', async (req, res) => {
 
 router.get('/cart/:userId', async (req, res) => {
     try {
-      const cart = await cartModel.find({ userId: req.params.userId},"product")
+      const cart = await cartModel.find({ userId: req.params.userId},)
       res.json(cart);
     } catch (error) {
       console.log(error);
@@ -242,6 +243,26 @@ router.delete('/cart/:productId', async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   });
+
+router.delete('/deleteCarts', async (req, res) => {
+    try {
+        const  userId  = req.body.token._id;
+        console.log(userId)
+
+        // Delete all carts of the specified user
+        await cartModel.deleteMany({ userId });
+        res.status(200).send({ message: 'Cart has been emptied succesfully' }); // Return a 204 No Content response on success
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Something went wrong' });
+    }
+});
+
+
+  
+  
+  
   
 router.get('/tweet/:id', (req, res) => {
 
