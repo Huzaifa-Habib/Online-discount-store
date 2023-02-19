@@ -1,5 +1,5 @@
 import express from 'express';
-import {productModel,userModel,categoryModel, cartModel } from './dbmodels.mjs'
+import {productModel,userModel,categoryModel, cartModel, orderModel } from './dbmodels.mjs'
 import mongoose from 'mongoose';
 
 const router = express.Router()
@@ -191,9 +191,9 @@ router.get('/items', async (req, res) => {
 
 router.post('/cart', async (req, res) => {
     try {
-      const { userId, product, quantity } = req.body;
+      const { userId, productId,productImage,productName,productPrice,productUnitName ,quantity } = req.body;
   
-      const cartItem = await cartModel.findOne({ userId, product });
+      const cartItem = await cartModel.findOne({ userId, productId });
   
       if (cartItem) {
         // If the cart item already exists, update the quantity
@@ -202,7 +202,7 @@ router.post('/cart', async (req, res) => {
         return;
       } else {
         // If the cart item doesn't exist, create a new one
-           await cartModel.create({ userId, product, quantity });
+           await cartModel.create({ userId, productId,productImage,productPrice,productUnitName,productName ,quantity });
       }
   
       res.status(201).send({ success: true });
@@ -244,6 +244,29 @@ router.delete('/cart/:productId', async (req, res) => {
     }
   });
 
+  router.put('/cart/:productId', async (req, res) => {
+    const { productId } = req.params;
+    const { quantity } = req.body;
+  
+    try {
+      // Find the product by ID
+      const product = await cartModel.findOne({productId:productId});
+  
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+  
+      // Update the quantity and save the product
+      product.quantity = quantity;
+      await product.save();
+  
+      return res.status(200).json({ message: 'Product quantity updated successfully' });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server error' });
+    }
+  });
+
 router.delete('/deleteCarts', async (req, res) => {
     try {
         const  userId  = req.body.token._id;
@@ -259,7 +282,42 @@ router.delete('/deleteCarts', async (req, res) => {
     }
 });
 
+router.put('/cart/:productId', async (req, res) => {
+    try {
+      const userId = req.body.token._id;
+      const productId = req.params.productId;
+      const quantity = req.body.quantity;
+      await Cart.findOneAndUpdate(
+        { userId, product: productId },
+        { $set: { quantity } }
+      );
+      res.status(200).json({ message: 'Cart updated successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
 
+router.post('/placeOrder', async (req, res) => {
+    const {userName, userNumber, product, quantity, totalPrice } = req.body;
+    const userId = req.body.token._id
+    
+    const order = new orderModel({
+      userId,
+      userName,
+      userNumber,
+      product,
+      quantity,
+      totalPrice
+    });
+  
+    try {
+      const newOrder = await order.save();
+      res.status(201).json(newOrder);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  });
   
   
   

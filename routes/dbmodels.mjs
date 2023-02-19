@@ -17,11 +17,29 @@ export const productModel = mongoose.model('Items', productSchema);
 
 const cartSchema = new mongoose.Schema({
     userId: String,
-    product: Object,
+    productId: String,
+    productName:String,
+    productImage:String,
+    productPrice:Number,
+    productUnitName:String,
     quantity: Number,
     
 });
 export const cartModel = mongoose.model('userCart', cartSchema);
+
+const orderSchema = new mongoose.Schema({
+    userId: String,
+    userName:String,
+    userNumber:Number,
+    product: Object,
+    quantity: Number,
+    totalPrice:Number,
+    orderStatus:{type:String, default:"Pending"},
+
+    
+});
+export const orderModel = mongoose.model('usersOrder', orderSchema);
+
 
 
 const userSchema = new mongoose.Schema({

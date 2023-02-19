@@ -81,12 +81,16 @@ function Home (){
         }
     }
 
-    const addToCarts = async (product) => {
+    const addToCarts = async (productId, productImage, productName, productPrice, productUnitName) => {
    
         try {
             const response = await axios.post(`${state?.baseUrl}/api/v1/cart`, {
               userId:state.user._id,
-              product,
+              productId,
+              productImage,
+              productName,
+              productPrice,
+              productUnitName,
               quantity:1
             });
       
@@ -241,7 +245,7 @@ function Home (){
                                             <h2 className="card-title">{eachProduct.name}</h2>
                                             <p className="card-description">{eachProduct.description}</p>
                                             <p className="card-price">Rs.{eachProduct.unitPrice} - per {eachProduct.unitName}</p>
-                                            <p className="card-button" onClick={() => addToCarts(eachProduct)}>Add to Cart</p>
+                                            <p className="card-button" onClick={() => addToCarts(eachProduct._id, eachProduct.image,eachProduct.name,eachProduct.unitPrice,eachProduct.unitName)}>Add to Cart</p>
                                         </div>
                                     </div>
                                                                     

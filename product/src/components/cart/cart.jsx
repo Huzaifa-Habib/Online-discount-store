@@ -17,8 +17,15 @@ function Cart () {
     const [cartItems, setCartItems] = useState([])
     const [error, setError] = useState("");
     const [show, setShow] = useState(null);
-    const [cart, setCart] = useState(new Map());
-    const totalPriceRef = useRef(0);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [address, setAddress] = useState('');
+    const [totalPrice, setTotalPrice] = useState(0);
+    
+    
+
+
 
 
     
@@ -41,11 +48,6 @@ function Cart () {
       
     }
 
-    // const calculateTotalPrice = () => {
-    //     const totalPrice = cartItems.reduce((acc, curr) => acc + curr.product.unitPrice * count, 0);
-    //     setTotal(totalPrice);
-    //     console.log(total)
-    // }
 
     const getCartItems = async () => {
         let userId = state.user._id
@@ -53,6 +55,13 @@ function Cart () {
           const response = await axios.get(`${state?.baseUrl}/api/v1/cart/${userId}`);
           console.log("cart items",response?.data);
           setCartItems(response.data)
+          setTotalPrice(
+            response.data.reduce(
+              (total, item) => total + item.productPrice * item.quantity,
+              0
+            )
+          );
+         
         } catch (error) {
           console.log(error);
         }
@@ -99,40 +108,104 @@ function Cart () {
         }
       };
 
-    useEffect(() => {
+    const submitOrderHandler = async (e) => {
+        e.preventDefault()
+        try {
+            const response = await axios.post('/api/orders', {
+                userName:state.user.fullName,
+                userNumber:phone,
+                product:cartItems,
+
+        
+
+            });
+            return response.data;
+          } catch (error) {
+            console.error(error);
+          }
+
+
+
+    }
+
+
+    const handleIncrement = (productId) => {
+        setIsSpinner(true)
+        const updatedCartItems = cartItems.map(cartItem => {
+          if (cartItem.productId === productId) {
+            return {
+              ...cartItem,
+              quantity: cartItem.quantity + 1 
+            };
+          }
+          return cartItem;
+        });
+        
+        axios.put(`${state.baseUrl}/api/v1/cart/${productId}`, { quantity: updatedCartItems.find(item => item.productId === productId).quantity })
+          .then((response) => {
+            console.log(response.data);
+            getCartItems();
+            setIsSpinner(false)
+
+          })
+          .catch((error) => {
+            console.log(error);
+            setIsSpinner(false)
+
+          });
+      
+        setCartItems(updatedCartItems);
+        setTotalPrice(
+            cartItems.reduce(
+              (total, item) => total + item.productPrice * item.quantity,
+              0
+            )
+          );
+      };
+      
+      const handleDecrement = (productId) => {
+        const updatedCartItems = cartItems.map(cartItem => {
+          if (cartItem.productId === productId && cartItem.quantity > 1) {
+            return {
+              ...cartItem,
+              quantity: cartItem.quantity - 1
+            };
+          }
+          return cartItem;
+        });
+      
+        // check if the quantity was actually decremented
+        const quantityDecremented = updatedCartItems.find(item => item.productId === productId).quantity < cartItems.find(item => item.productId === productId).quantity;
+      
+        if (quantityDecremented) {
+          setIsSpinner(true)
+      
+          axios.put(`${state.baseUrl}/api/v1/cart/${productId}`, {quantity: updatedCartItems.find(item => item.productId === productId).quantity})
+            .then((response) => {
+              console.log(response.data);
+              setIsSpinner(false);
+              setCartItems(updatedCartItems);
+              setTotalPrice(updatedCartItems.reduce(
+                (total, item) => total + item.productPrice * item.quantity,
+                0
+              ));
+            })
+            .catch((error) => {
+              console.log(error);
+              setIsSpinner(false);
+            });
+        }
+      };
+      
+
+      useEffect(() => {
         getCartItems()
       
     },[])
 
-    const handleIncrement = (productId) => {
-        const newCart = new Map(cart);
-        const quantity = newCart.get(productId) || 1;
-        newCart.set(productId, quantity + 1);
-        setCart(newCart);
- 
-      };
-    
-    const handleDecrement = (productId) => {
-        const newCart = new Map(cart);
-        const quantity = newCart.get(productId) || 1;
-        if (quantity > 0) {
-            newCart.set(productId, quantity - 1);
-            setCart(newCart);
-        }
-
-    };
 
 
-    // let total = 0;
-    // cartItems.forEach((item) => {
-    //     total += item.product.unitPrice * cart.get(item.product._id) || item.product.unitPrice ;
-
-    // });
-    totalPriceRef.current = cartItems.reduce((accumulator, item) => {
-        return accumulator + (item.product.unitPrice * cart.get(item.product._id) || item.product.unitPrice);
-      }, 0);
-      console.log(totalPriceRef.current)
-    // setTotalPrice({total})
+  
 
 
     
@@ -189,18 +262,18 @@ function Cart () {
                        
 
                             <div className="cartItems" key={i}>
-                                <AiOutlineCloseCircle onClick={() => removeProductFromCart(eachProduct.product._id)} style={{marginLeft:"auto",cursor:"pointer",position:"relative",top:"-6px",right:"-5px"}}/>
+                                <AiOutlineCloseCircle onClick={() => removeProductFromCart(eachProduct.productId)} style={{marginLeft:"auto",cursor:"pointer",position:"relative",top:"-6px",right:"-5px"}}/>
                                 <div className="cartItemsDesc">
-                                    <img src={eachProduct.product.image} height = "50" width="50"/>
+                                    <img src={eachProduct.productImage} height = "50" width="50"/>
                                     
-                                    <p style={{marginLeft:"8px",marginTop:"15px",fontSize:"0.8em",textTransform:"capitalize",fontWeight:"400"}}>{eachProduct.product.name}</p>
+                                    <p style={{marginLeft:"8px",marginTop:"15px",fontSize:"0.8em",textTransform:"capitalize",fontWeight:"400"}}>{eachProduct.productName}</p>
 
-                                    <AiOutlineMinus  onClick={() => handleDecrement(eachProduct.product._id)} style={{marginLeft:"10px",marginTop:"20px",fontSize:"0.6em",cursor:"pointer"}}/>
+                                    <AiOutlineMinus  onClick={() => handleDecrement(eachProduct.productId)} style={{marginLeft:"10px",marginTop:"20px",fontSize:"0.6em",cursor:"pointer"}}/>
 
-                                    <p style={{marginLeft:"2px",marginTop:"17px",fontSize:"0.6em",backgroundColor:"#D4D3D3",padding:'1px 10px'}}>{cart.get(eachProduct.product._id) || 1}</p>
-                                    <AiOutlinePlus onClick={() => handleIncrement(eachProduct.product._id)} style={{marginLeft:"2px",marginTop:"20px",fontSize:"0.6em",cursor:"pointer"}}/>
+                                    <p style={{marginLeft:"2px",marginTop:"17px",fontSize:"0.6em",backgroundColor:"#D4D3D3",padding:'1px 10px'}}>{eachProduct.quantity}</p>
+                                    <AiOutlinePlus onClick={() => handleIncrement(eachProduct.productId)} style={{marginLeft:"2px",marginTop:"20px",fontSize:"0.6em",cursor:"pointer"}}/>
                                     
-                                    <p style={{marginLeft:"auto",marginTop:"16px",fontSize:"0.7em",fontWeight:"bold"}}>Rs.{eachProduct.product.unitPrice * cart.get(eachProduct.product._id) || eachProduct.product.unitPrice}</p>
+                                    <p style={{marginLeft:"auto",marginTop:"16px",fontSize:"0.7em",fontWeight:"bold"}}>Rs.{eachProduct.productPrice * eachProduct.quantity}</p>
 
                                 </div>
                             
@@ -219,11 +292,62 @@ function Cart () {
                     </div>
                 }           
           
-            </div>
+          </div>
          
          
+            <div className="orderDiv">
+                <div className="totalPrice">
+                    <p>Total</p>
+                    <p>Rs.{totalPrice}</p>
 
+                </div>
+                <form onSubmit={submitOrderHandler}>
+                    <div>
+                        <input
+                        type="text"
+                        id="name"
+                        onChange={(e) =>{setName(e.target.value)}}
+                        placeholder = "Full Name"
+                        required
+
+                        />
+                    </div>
+                    <div>
+                        <input
+                        type="email"
+                        id="email"
+                        onChange={(e) =>{setEmail(e.target.value)}}
+                        placeholder = "Email"
+                        required
+
+                        />
+                    </div>
+                    <div>
+                        <input
+                        type="tel"
+                        id="phone"
+                        onChange={(e) =>{setPhone(e.target.value)}}
+                        placeholder = "Phone Number"
+                        required
+
+                        />
+                    </div>
+                    <div>
+                        <textarea
+                        id="address"
+                        onChange={(e) =>{setAddress(e.target.value)}}
+                        placeholder = "Shipping Address"
+                        required
+                        />
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <button className="cool-button">Place Order</button>
+                    </div>
+                </form>
+
+            </div>
         </div>
+ 
         {/* Bottom navbar */}
         <div className="bottom-navbar">
           <button>Home</button>
