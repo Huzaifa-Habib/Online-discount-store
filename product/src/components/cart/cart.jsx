@@ -7,7 +7,13 @@ import {useRef,useContext} from 'react';
 import {useNavigate} from "react-router-dom"
 import { GlobalContext } from '../../context/context';
 import {MdDelete} from "react-icons/md"
-import {AiOutlineMinus,AiOutlinePlus,AiOutlineCloseCircle} from "react-icons/ai"
+import {AiOutlineMinus,AiOutlinePlus,AiOutlineCloseCircle,AiOutlineHome} from "react-icons/ai"
+import {FaUserAlt} from "react-icons/fa"
+import {BsCart4} from "react-icons/bs"
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import Paper from '@mui/material/Paper';
+import * as React from 'react';
 
 
 
@@ -22,7 +28,9 @@ function Cart () {
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
     const [totalPrice, setTotalPrice] = useState(0);
-    
+    const [value, setValue] = React.useState(0);
+
+
     
 
 
@@ -49,159 +57,162 @@ function Cart () {
     }
 
 
-    const getCartItems = async () => {
-        let userId = state.user._id
-        try {
-          const response = await axios.get(`${state?.baseUrl}/api/v1/cart/${userId}`);
-          console.log("cart items",response?.data);
-          setCartItems(response.data)
-          setTotalPrice(
-            response.data.reduce(
-              (total, item) => total + item.productPrice * item.quantity,
-              0
-            )
-          );
-         
+  const getCartItems = async () => {
+      let userId = state.user._id
+      try {
+        const response = await axios.get(`${state?.baseUrl}/api/v1/cart/${userId}`);
+        console.log("cart items",response?.data);
+        setCartItems(response.data)
+        setTotalPrice(
+          response.data.reduce(
+            (total, item) => total + item.productPrice * item.quantity,
+            0
+          )
+        );
+        
+      } catch (error) {
+        console.log(error);
+      }
+  };
+
+  const removeProductFromCart = async (productId) =>{
+      setIsSpinner(true)
+      try {
+          const response = await axios.delete(`${state.baseUrl}/api/v1/cart/${productId}`);
+          console.log(response.data.message);
+          // Reload the page or update the cart state to reflect the change
+          getCartItems()
+          setIsSpinner(false)
         } catch (error) {
-          console.log(error);
+          console.error(error);
+          setIsSpinner(false)
+          // Handle the error appropriately
         }
+
+  }
+
+  const handleDeleteAllCarts = async () => {
+      if(cartItems.length !== 0){
+          setIsSpinner(true)
+          try {
+              const resp =  await axios.delete(`${state.baseUrl}/api/v1/deleteCarts/`);
+              console.log(resp)
+              getCartItems()
+              setIsSpinner(false)
+          
+          } catch (error) {
+              console.error(error);
+              setError(error.response.data.message)
+              setShow(true)
+              setIsSpinner(false)
+
+
+          }
+      }
+      else{
+          setError("Cart is already empty")
+          setShow(true)
+
+      }
     };
 
-    const removeProductFromCart = async (productId) =>{
-        setIsSpinner(true)
-        try {
-            const response = await axios.delete(`${state.baseUrl}/api/v1/cart/${productId}`);
-            console.log(response.data.message);
-            // Reload the page or update the cart state to reflect the change
-            getCartItems()
-            setIsSpinner(false)
-          } catch (error) {
-            console.error(error);
-            setIsSpinner(false)
-            // Handle the error appropriately
-          }
+ 
 
-    }
-
-    const handleDeleteAllCarts = async () => {
-        if(cartItems.length !== 0){
-            setIsSpinner(true)
-            try {
-                const resp =  await axios.delete(`${state.baseUrl}/api/v1/deleteCarts/`);
-                console.log(resp)
-                getCartItems()
-                setIsSpinner(false)
-            
-            } catch (error) {
-                console.error(error);
-                setError(error.response.data.message)
-                setShow(true)
-                setIsSpinner(false)
-
-
-            }
+  const handleIncrement = (productId) => {
+      setIsSpinner(true)
+      const updatedCartItems = cartItems.map(cartItem => {
+        if (cartItem.productId === productId) {
+          return {
+            ...cartItem,
+            quantity: cartItem.quantity + 1 
+          };
         }
-        else{
-            setError("Cart is already empty")
-            setShow(true)
+        return cartItem;
+      });
+      
+      axios.put(`${state.baseUrl}/api/v1/cart/${productId}`, { quantity: updatedCartItems.find(item => item.productId === productId).quantity })
+        .then((response) => {
+          console.log(response.data);
+          getCartItems();
+          setIsSpinner(false)
 
-        }
-      };
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsSpinner(false)
 
-    const submitOrderHandler = async (e) => {
-        e.preventDefault()
-        try {
-            const response = await axios.post('/api/orders', {
-                userName:state.user.fullName,
-                userNumber:phone,
-                product:cartItems,
-
-        
-
-            });
-            return response.data;
-          } catch (error) {
-            console.error(error);
-          }
-
-
-
-    }
-
-
-    const handleIncrement = (productId) => {
-        setIsSpinner(true)
-        const updatedCartItems = cartItems.map(cartItem => {
-          if (cartItem.productId === productId) {
-            return {
-              ...cartItem,
-              quantity: cartItem.quantity + 1 
-            };
-          }
-          return cartItem;
         });
-        
-        axios.put(`${state.baseUrl}/api/v1/cart/${productId}`, { quantity: updatedCartItems.find(item => item.productId === productId).quantity })
-          .then((response) => {
-            console.log(response.data);
-            getCartItems();
-            setIsSpinner(false)
-
-          })
-          .catch((error) => {
-            console.log(error);
-            setIsSpinner(false)
-
-          });
-      
-        setCartItems(updatedCartItems);
-        setTotalPrice(
-            cartItems.reduce(
-              (total, item) => total + item.productPrice * item.quantity,
-              0
-            )
-          );
-      };
-      
-      const handleDecrement = (productId) => {
-        const updatedCartItems = cartItems.map(cartItem => {
-          if (cartItem.productId === productId && cartItem.quantity > 1) {
-            return {
-              ...cartItem,
-              quantity: cartItem.quantity - 1
-            };
-          }
-          return cartItem;
+    
+      setCartItems(updatedCartItems);
+      setTotalPrice(
+          cartItems.reduce(
+            (total, item) => total + item.productPrice * item.quantity,
+            0
+          )
+        );
+  };
+    
+  const handleDecrement = (productId) => {
+    const updatedCartItems = cartItems.map(cartItem => {
+      if (cartItem.productId === productId && cartItem.quantity > 1) {
+        return {
+          ...cartItem,
+          quantity: cartItem.quantity - 1
+        };
+      }
+      return cartItem;
+    });
+  
+    // check if the quantity was actually decremented
+    const quantityDecremented = updatedCartItems.find(item => item.productId === productId).quantity < cartItems.find(item => item.productId === productId).quantity;
+  
+    if (quantityDecremented) {
+      setIsSpinner(true)
+  
+      axios.put(`${state.baseUrl}/api/v1/cart/${productId}`, {quantity: updatedCartItems.find(item => item.productId === productId).quantity})
+        .then((response) => {
+          console.log(response.data);
+          setIsSpinner(false);
+          setCartItems(updatedCartItems);
+          setTotalPrice(updatedCartItems.reduce(
+            (total, item) => total + item.productPrice * item.quantity,
+            0
+          ));
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsSpinner(false);
         });
+    }
+  };
       
-        // check if the quantity was actually decremented
-        const quantityDecremented = updatedCartItems.find(item => item.productId === productId).quantity < cartItems.find(item => item.productId === productId).quantity;
-      
-        if (quantityDecremented) {
-          setIsSpinner(true)
-      
-          axios.put(`${state.baseUrl}/api/v1/cart/${productId}`, {quantity: updatedCartItems.find(item => item.productId === productId).quantity})
-            .then((response) => {
-              console.log(response.data);
-              setIsSpinner(false);
-              setCartItems(updatedCartItems);
-              setTotalPrice(updatedCartItems.reduce(
-                (total, item) => total + item.productPrice * item.quantity,
-                0
-              ));
-            })
-            .catch((error) => {
-              console.log(error);
-              setIsSpinner(false);
-            });
-        }
-      };
-      
+  useEffect(() => {
+    getCartItems()
+  
+  },[])
 
-      useEffect(() => {
-        getCartItems()
-      
-    },[])
+  const submitOrderHandler = async (e) => {
+    e.preventDefault()
+    try {
+        const response = await axios.post(`${state.baseUrl}/api/v1/placeOrder`, {
+            userName:name,
+            userNumber:phone,
+            products:cartItems,
+            totalPrice:totalPrice,
+            userEmail:email,
+            userAddress:address,
+
+        });
+        console.log(response.data)
+        e.target.reset()
+        setShow(true)
+        setError(response.data.message)
+        handleDeleteAllCarts(); 
+      } catch (error) {
+        console.error(error);
+      }
+  }
+
 
 
 
@@ -286,7 +297,7 @@ function Cart () {
                     </>
                     
                     : <div className="emptyCart">
-                        <h3>Cart is empty now</h3>
+                        <h3>Cart is empty</h3>
 
 
                     </div>
@@ -341,7 +352,7 @@ function Cart () {
                         />
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <button className="cool-button">Place Order</button>
+                        <button className="cool-button" type="submit">Place Order</button>
                     </div>
                 </form>
 
@@ -350,9 +361,22 @@ function Cart () {
  
         {/* Bottom navbar */}
         <div className="bottom-navbar">
-          <button>Home</button>
-          <button>Cart</button>
-          <button>Profile</button>
+          <nav >
+            <Paper sx={{ position: 'fixed', bottom:0,  left: 0, right: 0, background:"green" }} elevation={3} className="homeBottomNavbar">
+                <BottomNavigation
+                  showLabels
+                  value={value}
+                  onChange={(event, newValue) => {
+                      setValue(newValue);
+                  }}
+                >
+                    <BottomNavigationAction style={{color:"#6D6E71"}} href='/' label="Home" icon={<AiOutlineHome />} />
+                    <BottomNavigationAction style={{color:"#61B846"}} href='/cart' label="Cart" icon={<BsCart4/>} />
+                    <BottomNavigationAction style={{color:"#6D6E71"}} href='/userAccount' label="Account" icon={<FaUserAlt />} />
+                </BottomNavigation>
+            </Paper>
+
+          </nav>
         </div>
       </div>
     )

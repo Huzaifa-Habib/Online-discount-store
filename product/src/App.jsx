@@ -16,6 +16,7 @@ import AdminScreen from './components/admin/adminScreen';
 import AdminAccount from './components/admin-account/admin';
 import AddItem from './components/addItems/add';
 import Cart from './components/cart/cart';
+import UserAccount from './components/user_account/userAccount';
 
 
 
@@ -126,6 +127,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />   
               <Route path="/cart" element={<Cart />} />
+              <Route path="/userAccount" element={<UserAccount/>} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/Profile" element={<Profile />} />

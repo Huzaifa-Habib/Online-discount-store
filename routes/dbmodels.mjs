@@ -28,13 +28,23 @@ const cartSchema = new mongoose.Schema({
 export const cartModel = mongoose.model('userCart', cartSchema);
 
 const orderSchema = new mongoose.Schema({
-    userId: String,
     userName:String,
     userNumber:Number,
-    product: Object,
-    quantity: Number,
+    userEmail:String,
+    userAddress:String,
+    products: [{
+        productName: String,
+        quantity: Number,
+        productPrice: Number,
+        productUnitName:String,
+        userId:String,
+        productImage:String,
+        productId:String,
+    }],  
     totalPrice:Number,
     orderStatus:{type:String, default:"Pending"},
+    createdOn: { type: Date, default: Date.now }
+
 
     
 });

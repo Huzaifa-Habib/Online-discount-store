@@ -82,6 +82,8 @@ function Home (){
     }
 
     const addToCarts = async (productId, productImage, productName, productPrice, productUnitName) => {
+        setIsSpinner(true)
+        console.log(productImage)
    
         try {
             const response = await axios.post(`${state?.baseUrl}/api/v1/cart`, {
@@ -93,9 +95,14 @@ function Home (){
               productUnitName,
               quantity:1
             });
-      
             console.log(response.data);
+            setIsSpinner(false)
+            setShow(true)
+            setError(response.data.message)
+
+
           } catch (error) {
+            setIsSpinner(false)
             setShow(true)
             console.log(error.response);
             setError(error.response.data.message)
@@ -119,7 +126,7 @@ function Home (){
             <div className='notificationView' >
                 <div className="notification">
                     <AiOutlineCloseCircle style={{marginLeft:"auto",cursor:"pointer",fontSize:"18px",position:"relative",top:"-10px",right:"-10px"} }onClick= {() => setShow(false)}/>
-                    <p className="notification-message">{error} !</p>
+                    <p className="notification-message">{error} </p>
                 </div> 
             </div>
 
@@ -233,54 +240,58 @@ function Home (){
                     </div>
                     <div className="child2c">
                         <div className="scrollable-content">
-                        {
+                        <div className="card-container">
+                            {
 
-                            (allData?.length)?
-                            <>
-                                { allData.map((eachProduct,i) => (  
-                                <div className='homeProduct' key={i}>
-                                    <div className="card">
-                                        <div className="card-img"><img src={eachProduct.image} alt="product Image" height="150" width="150"/></div>
-                                        <div className="card-body">
-                                            <h2 className="card-title">{eachProduct.name}</h2>
-                                            <p className="card-description">{eachProduct.description}</p>
-                                            <p className="card-price">Rs.{eachProduct.unitPrice} - per {eachProduct.unitName}</p>
-                                            <p className="card-button" onClick={() => addToCarts(eachProduct._id, eachProduct.image,eachProduct.name,eachProduct.unitPrice,eachProduct.unitName)}>Add to Cart</p>
-                                        </div>
-                                    </div>
-                                                                    
+                                (allData?.length)?
+                                <>
+                                    { allData.map((eachProduct,i) => (  
+                                    <div className='homeProduct' key={i}>
+                                            <div className="card">
+                                                <div className="card-img"><img src={eachProduct.image} alt="product Image" height="150" width="150"/></div>
+                                                <div className="card-body">
+                                                    <h2 className="card-title">{eachProduct.name}</h2>
+                                                    <p className="card-description">{eachProduct.description}</p>
+                                                    <p className="card-price">Rs.{eachProduct.unitPrice} - per {eachProduct.unitName}</p>
+                                                    <p className="card-button" onClick={() => addToCarts(eachProduct._id, eachProduct.image,eachProduct.name,eachProduct.unitPrice,eachProduct.unitName)}>Add to Cart</p>
+                                                </div>
+                                            </div>
+                                                                        
 
+                                        
                                     
-                                   
-                             
+                                
+                                    </div>
+                                    ))}
+                                </>
+                                :
+                                null}
+                                {(allData?.length === 0 ? "No Product found" : null)}
+                                <div style={{position:"absolute", top:"50%",left: "50%"}}>
+                                    {(allData === null ? <Spinner animation="grow" variant="primary" /> : null)}
                                 </div>
-                                ))}
-                            </>
-                            :
-                            null}
-                               {(allData?.length === 0 ? "No Product found" : null)}
-                              <div style={{position:"absolute", top:"50%",left: "50%"}}>
-                                {(allData === null ? <Spinner animation="grow" variant="primary" /> : null)}
-                              </div>
                             
                         </div>
                     </div>
+                    </div>
+
                 </div>
+
             </div>
             <nav >
-            <Paper sx={{ position: 'fixed', bottom:0,  left: 0, right: 0, background:"green" }} elevation={3} className="homeBottomNavbar">
-                <BottomNavigation
-                showLabels
-                value={value}
-                onChange={(event, newValue) => {
-                    setValue(newValue);
-                }}
-                >
-                    <BottomNavigationAction style={{color:"#61B846"}} href='/' label="Home" icon={<AiOutlineHome />} />
-                    <BottomNavigationAction style={{color:"#6D6E71"}} href='/cart' label="Cart" icon={<BsCart4/>} />
-                    <BottomNavigationAction style={{color:"#6D6E71"}} href='/adminAccount' label="Account" icon={<FaUserAlt />} />
-                </BottomNavigation>
-            </Paper>
+                <Paper sx={{ position: 'fixed', bottom:0,  left: 0, right: 0, background:"green" }} elevation={3} className="homeBottomNavbar">
+                    <BottomNavigation
+                    showLabels
+                    value={value}
+                    onChange={(event, newValue) => {
+                        setValue(newValue);
+                    }}
+                    >
+                        <BottomNavigationAction style={{color:"#61B846"}} href='/' label="Home" icon={<AiOutlineHome />} />
+                        <BottomNavigationAction style={{color:"#6D6E71"}} href='/cart' label="Cart" icon={<BsCart4/>} />
+                        <BottomNavigationAction style={{color:"#6D6E71"}} href='/adminAccount' label="Account" icon={<FaUserAlt />} />
+                    </BottomNavigation>
+                </Paper>
 
             </nav>
         </div>

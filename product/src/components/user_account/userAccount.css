@@ -1,0 +1,90 @@
+.main-container-userAccount {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .userAccountInfoDiv {
+    overflow: hidden;
+  }
+
+  .userImageDiv{
+    border: 1px solid #61B846;
+    width: 100px; /* set the desired width of the container */
+    height: 100px; /* set the desired height of the container */
+    border-radius: 50%; /* set the border radius to create a circle */
+    overflow: hidden; 
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+  }
+  
+  .userImageDiv img{
+    width: 100%; /* set the image to fill the container */
+    height: auto; /* allow the height to adjust proportionally */
+    display: block; /* remove any default spacing or margins */
+
+  }
+  .ordersDisplayDiv{
+    border-bottom: 3px solid #D9D9D9;
+    margin-top: 10px;
+  }
+  .userOrdersDiv {
+    overflow-y: scroll;
+    flex: 1;
+    padding-bottom: 64px; 
+    padding-left: 30px;
+    padding-right: 10px;
+    width: 100%;
+  }
+  .userName{
+    text-transform: capitalize;
+    font-size: 1.3em;
+    font-weight: 700;
+  }
+
+  .time-status-contact{
+    position: relative;
+    top: -5px;
+    padding-left: 3px;
+    display: flex;
+  }
+
+  .time-status-contact span{
+    font-size: 0.6em;
+    font-weight: 500;
+
+  }
+
+  .userPhone{
+    font-size: 0.7em;
+    font-weight: 500;
+    margin-left: auto;
+
+  }
+
+  .quantity p{
+    line-height: 1px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #BFBFBF;
+    text-transform: capitalize;
+  }
+  .totalOrderPrice{
+    display: flex;
+    justify-content: space-between;
+  }
+  .totalOrderPrice p:first-child{
+    font-size: 0.9em;
+    font-weight: 600;
+  }
+  .totalOrderPrice p:last-child{
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #61B846;
+  }
+  
+  .fixed-navbar {
+    position: fixed;
+    bottom: 0;
+  }

@@ -12,8 +12,7 @@ router.post('/item', (req, res) => {
       !body.productImage||
       !body.description||
       !body.price||
-      !body.unit||
-      !body.description
+      !body.unit
 
       
   ) {
@@ -24,6 +23,10 @@ router.post('/item', (req, res) => {
   }
 
   console.log(body)
+  body.name = body.name?.toLowerCase()
+  body.description = body.description?.toLowerCase()
+  body.unit = body.unit?.toLowerCase()
+
 
     productModel.create({
         name:body.name ,
@@ -51,6 +54,7 @@ router.post('/item', (req, res) => {
 
 router.post('/category', (req, res) => {
     const body = req.body;
+    body.category = body.category.toLowerCase()
    
   if ( // validation
       !body.category
@@ -118,39 +122,6 @@ router.get('/categories', (req, res) => {
 
 
 
-
-
-// router.get('/items', (req, res) => {
-//     const productId = new mongoose.Types.ObjectId(req.body.token._id);
-
-//     productModel.find(
-//         { owner: userId },
-//         {},
-//         {
-//             sort: { "_id": -1 },
-//             limit: 50,
-//             skip: 0,
-//             populate:
-//             {
-//                 path: "owner",
-//                 select: 'firstName lastName email profileImage'
-//             }
-//         }
-//         , (err, data) => {
-//             if (!err) {
-//                 res.send({
-//                     message: "got all tweets successfully",
-//                     data: data
-//                 })
-//             } else {
-//                 res.status(500).send({
-//                     message: "server error"
-//                 })
-//             }
-//         });
- 
-// })
-
 router.get('/items', async (req, res) => {
 
     try {
@@ -202,10 +173,12 @@ router.post('/cart', async (req, res) => {
         return;
       } else {
         // If the cart item doesn't exist, create a new one
-           await cartModel.create({ userId, productId,productImage,productPrice,productUnitName,productName ,quantity });
+        await cartModel.create({ userId, productId, productImage ,productPrice,productUnitName,productName ,quantity });
+        console.log(productImage)
+
       }
   
-      res.status(201).send({ success: true });
+      res.status(201).send({ message: "Item added in the cart"});
     } catch (error) {
       console.log(error);
       res.status(500).send({ success: false, error });
@@ -259,7 +232,7 @@ router.delete('/cart/:productId', async (req, res) => {
       // Update the quantity and save the product
       product.quantity = quantity;
       await product.save();
-  
+
       return res.status(200).json({ message: 'Product quantity updated successfully' });
     } catch (error) {
       console.error(error);
@@ -269,7 +242,7 @@ router.delete('/cart/:productId', async (req, res) => {
 
 router.delete('/deleteCarts', async (req, res) => {
     try {
-        const  userId  = req.body.token._id;
+        const userId = req.body.token._id;
         console.log(userId)
 
         // Delete all carts of the specified user
@@ -282,40 +255,53 @@ router.delete('/deleteCarts', async (req, res) => {
     }
 });
 
-router.put('/cart/:productId', async (req, res) => {
-    try {
-      const userId = req.body.token._id;
-      const productId = req.params.productId;
-      const quantity = req.body.quantity;
-      await Cart.findOneAndUpdate(
-        { userId, product: productId },
-        { $set: { quantity } }
-      );
-      res.status(200).json({ message: 'Cart updated successfully' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-  });
+// router.put('/cart/:productId', async (req, res) => {
+//     try {
+//       const userId = req.body.token._id;
+//       const productId = req.params.productId;
+//       const quantity = req.body.quantity;
+//       await Cart.findOneAndUpdate(
+//         { userId, product: productId },
+//         { $set: { quantity } }
+//       );
+//       res.status(200).json({ message: 'Cart updated successfully' });
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ message: 'Internal server error' });
+//     }
+//   });
 
 router.post('/placeOrder', async (req, res) => {
-    const {userName, userNumber, product, quantity, totalPrice } = req.body;
-    const userId = req.body.token._id
-    
+    req.body.userName = req.body.userName.toLowerCase()
+    req.body.userEmail = req.body.userEmail.toLowerCase()
+    req.body.userAddress = req.body.userAddress.toLowerCase()
+
     const order = new orderModel({
-      userId,
-      userName,
-      userNumber,
-      product,
-      quantity,
-      totalPrice
-    });
-  
+        userName: req.body.userName,
+        userNumber: req.body.userNumber,
+        products: req.body.products,
+        totalPrice:req.body.totalPrice,
+        userEmail:req.body.userEmail,
+        userAddress:req.body.userAddress
+      });
+
     try {
       const newOrder = await order.save();
-      res.status(201).json(newOrder);
+      res.status(201).send({message:"Order received successfully and it's in now pending", orderDetail:newOrder});
     } catch (err) {
       res.status(400).json({ message: err.message });
+    }
+});
+
+router.get('/orders/:userId', async (req, res) => {
+    try {
+      const orders = await orderModel.find({
+        'products.userId': { $in: [req.params.userId] }
+      });
+  
+      res.status(200).json({ success: true, data: orders });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
     }
   });
   

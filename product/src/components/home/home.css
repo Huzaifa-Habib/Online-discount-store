@@ -15,7 +15,6 @@
   
   .notification {
     background-color: #fff;
-    border: 2px solid #ccc;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     padding: 15px;
@@ -30,6 +29,7 @@
     margin-left: auto;
     margin-right: auto;
     margin-top: 10px;
+    text-align: center;
   }
   
   .notification-message {
@@ -65,6 +65,8 @@
     text-transform: uppercase;
     color: #61B846;
 }
+
+
 .cartIcon{
     margin-left: auto;
     margin-top: 12px;
@@ -136,36 +138,34 @@
     margin-top: 20px;
     margin-bottom: 10px;
 }
-/* .homeProduct{
-    display: flex;
-    border: 2px solid #65BD50;
-    height: 100px;
-    width: 100%;
-    border-radius: 10px;
-    align-items: center;
-    margin-top: 10px;
-    padding: 5px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 90%;
-    box-sizing: border-box;
-    word-wrap: break-word;
-    
-} */
+
+
 
 .scrollable-content {
     height: 100%;
 
 }
 
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row !important;
+}
+
+.homeProduct{
+    margin-left: 30px;
+
+}
+
 .card {
-    width: 300px;
+    width: 100%;
     height: auto;
-    margin: 20px auto;
+    margin: 20px 10px;
     background-color: #fff;
     border-radius: 10px;
-    overflow: hidden;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px 150px;
+  
 }
   
 .card-img img {
@@ -217,3 +217,10 @@
 .card-button:hover {
     background-color: #1e6091;
 }
+
+
+@media (max-width: 768px) {
+    .card {
+      width: 100%;
+    }
+  }

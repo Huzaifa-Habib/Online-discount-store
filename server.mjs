@@ -30,6 +30,7 @@ app.use(cors({
 
 }));
 
+
 app.use('/api/v1', authApis)
 app.use('/api/v1',(req, res, next) => {
 
