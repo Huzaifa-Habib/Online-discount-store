@@ -43,8 +43,7 @@ const orderSchema = new mongoose.Schema({
     }],  
     totalPrice:Number,
     orderStatus:{type:String, default:"Pending"},
-    createdOn: { type: Date, default: Date.now }
-
+    createdOn: { type: Date }
 
     
 });

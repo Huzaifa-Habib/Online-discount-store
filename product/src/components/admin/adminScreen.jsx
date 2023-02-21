@@ -15,6 +15,8 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Paper from '@mui/material/Paper';
 import * as React from 'react';
+import {BsCardList} from "react-icons/bs"
+
 
 function AdminScreen() {
   axios.defaults.withCredentials = true
@@ -44,7 +46,7 @@ function AdminScreen() {
         try {
             const response = await axios.get(`${state?.baseUrl}/api/v1/items`)
             console.log("Products",response.data)
-             setAllData(response.data.data)
+             setAllData(response.data)
         
         } catch (error) {
             console.log("error in getting all tweets", error);
@@ -116,13 +118,15 @@ function AdminScreen() {
 
   
           </div>
+          <a href="orderHandling" style={{marginLeft:"auto",marginTop:"10px"}}><BsCardList style={{height:"25px",width:"25px"}}/></a>
+          
         </div>
 
           <h5 className='productHead'>All Products</h5>
         <div className='productDisplayDiv'>
           {
 
-            (allData.length !== 0)?
+            (allData.length)?
               <>
                 { allData.map((eachProduct,i) => (  
                   <div className='product' key={i}>
@@ -147,14 +151,13 @@ function AdminScreen() {
             ))}
 
         </>
+      :
+      null}
+      {(allData?.length === 0 ? "No Product found" : null)}
+      <div style={{position:"absolute", top:"50%",left: "50%"}}>
+          {(allData === null ? <Spinner animation="grow" variant="primary" /> : null)}
+      </div>
 
-
-  :
-  <h3>No Products</h3>
-
-    
-
-}
           
           
           

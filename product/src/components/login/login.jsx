@@ -49,6 +49,8 @@ function Login() {
                 type: 'ADMIN_LOGIN',
                 payload: response.data.profile
               })
+              navigate("/")
+              window.location.reload()
               return;
               
             }
@@ -57,6 +59,8 @@ function Login() {
                 type: 'USER_LOGIN',
                 payload: response.data.profile
               })
+              navigate("/")
+              window.location.reload()
 
             }
 

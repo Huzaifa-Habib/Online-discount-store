@@ -1,0 +1,15 @@
+.main-div-orderHandling{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.displayUsersOrder{
+    overflow-y: scroll;
+    flex: 1;
+    padding-bottom: 64px; 
+    padding-left: 30px;
+    padding-right: 10px;
+    width: 100%;
+
+}

@@ -289,7 +289,7 @@ function Home (){
                     >
                         <BottomNavigationAction style={{color:"#61B846"}} href='/' label="Home" icon={<AiOutlineHome />} />
                         <BottomNavigationAction style={{color:"#6D6E71"}} href='/cart' label="Cart" icon={<BsCart4/>} />
-                        <BottomNavigationAction style={{color:"#6D6E71"}} href='/adminAccount' label="Account" icon={<FaUserAlt />} />
+                        <BottomNavigationAction style={{color:"#6D6E71"}} href='/userAccount' label="Account" icon={<FaUserAlt />} />
                     </BottomNavigation>
                 </Paper>
 

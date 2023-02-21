@@ -282,7 +282,8 @@ router.post('/placeOrder', async (req, res) => {
         products: req.body.products,
         totalPrice:req.body.totalPrice,
         userEmail:req.body.userEmail,
-        userAddress:req.body.userAddress
+        userAddress:req.body.userAddress,
+        createdOn: new Date()
       });
 
     try {
@@ -292,6 +293,17 @@ router.post('/placeOrder', async (req, res) => {
       res.status(400).json({ message: err.message });
     }
 });
+
+router.get('/allOrders', async (req, res) => {
+    try {
+      const orders = await orderModel.find();
+  
+      res.status(200).json({ success: true, data: orders });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  });
+  
 
 router.get('/orders/:userId', async (req, res) => {
     try {
@@ -304,6 +316,34 @@ router.get('/orders/:userId', async (req, res) => {
       res.status(500).json({ success: false, message: error.message });
     }
   });
+
+  
+router.put('/updateStatus/:orderId', async (req, res) => {
+    const { orderId } = req.params;
+    const { orderStatus} = req.body;
+
+    try {
+      const order = await orderModel.findById(orderId);
+      if (!order) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
+  
+      // Check if the selected status value is already set for this order
+      if (order.orderStatus === orderStatus) {
+        return res.status(400).json({ message: 'Status is already set' });
+      }
+  
+      order.orderStatus = orderStatus;
+      await order.save();
+      res.json({ message: 'Order status updated' });
+
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server error' });
+    }
+
+  });
+
   
   
   

@@ -141,6 +141,16 @@ app.post('/api/v1/change-password', async (req, res) => {
 })
 
 app.post("/api/v1/updateProfileImg", async (req, res) =>{
+    const body = req.body
+    if ( // validation
+    !body.profileImage
+
+    ) {
+        res.status(400).send({
+            message: "required parameters missing",
+        });
+        return;
+    }
     try{
         const body = req.body;
         const profileImage = body.profileImage

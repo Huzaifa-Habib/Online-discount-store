@@ -17,6 +17,7 @@ import AdminAccount from './components/admin-account/admin';
 import AddItem from './components/addItems/add';
 import Cart from './components/cart/cart';
 import UserAccount from './components/user_account/userAccount';
+import OrderHandling from './components/order-handling/orderHandling';
 
 
 
@@ -123,7 +124,7 @@ function App() {
         }   */}
 
          {
-         (state?.isLogin === true) ?
+         (state?.isLogin === true)?
             <Routes>
               <Route path="/" element={<Home />} />   
               <Route path="/cart" element={<Cart />} />
@@ -144,6 +145,7 @@ function App() {
               <Route path="/" element={<AdminScreen />} />
               <Route path="/adminAccount" element={<AdminAccount />} />
               <Route path="/addItems" element={<AddItem />} />
+              <Route path="/orderHandling" element={<OrderHandling />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/Profile" element={<Profile />} />

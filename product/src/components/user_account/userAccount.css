@@ -25,6 +25,19 @@
     display: block; /* remove any default spacing or margins */
 
   }
+ 
+
+  .camera{
+    position: relative;
+    cursor: pointer;
+    top: -35px;
+    width: 30px;
+    height: 30px;
+    left: 15px;
+    z-index: 3;
+    margin-left: auto;
+    margin-right: auto;
+  }
   .ordersDisplayDiv{
     border-bottom: 3px solid #D9D9D9;
     margin-top: 10px;
@@ -62,13 +75,25 @@
     margin-left: auto;
 
   }
+  .quantity{
+    display: flex;
+  }
 
-  .quantity p{
+  .quantity :first-child{
     line-height: 1px;
     font-size: 12px;
     font-weight: 400;
     color: #BFBFBF;
     text-transform: capitalize;
+  }
+  .quantity :last-child{
+    line-height: 1px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #BFBFBF;
+    text-transform: capitalize;
+    margin-left: auto;
+
   }
   .totalOrderPrice{
     display: flex;

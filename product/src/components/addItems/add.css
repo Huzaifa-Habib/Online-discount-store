@@ -113,12 +113,12 @@
 
 .spinner-div{
     position: absolute;
-    z-index: 2;
     background-color: rgba(0, 0, 0, 0.171);
     height: calc(100vh);
     width: calc(100vw);
     top: 0;
     display: none;
+    z-index: 9999;
   
   
   
@@ -130,6 +130,7 @@
     align-items: center;
     top: 0;
     min-height: calc(100vh);
+    z-index: 9999;
   }
 
 @media screen and (max-height:800px) {

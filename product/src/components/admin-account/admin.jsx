@@ -22,6 +22,7 @@ import * as React from 'react';
 
 
 
+
 function AdminAccount () {
     let { state, dispatch } = useContext(GlobalContext);
     const [imageUpload,setImageUpload] =useState (null) 
@@ -31,6 +32,8 @@ function AdminAccount () {
     const [value, setValue] = React.useState(0);
     const [isUpdateName, setIsUpdateName] = useState(false)
     const [updatedNameValue, setUpdateNameValue] = useState(null)
+    let navigate = useNavigate();
+
 
 
 
@@ -58,7 +61,7 @@ function AdminAccount () {
           .then((url) =>{
             console.log("ImageURL", url)
                 axios.post(`${state.baseUrl}/api/v1/updateProfileImg`, {
-                    profileImage:url
+                    profileImage:url,
                 })
     
                 .then((response) => {
@@ -133,6 +136,8 @@ function AdminAccount () {
                 type: 'ADMIN_LOGOUT',
                 payload: null
             })   
+            navigate("/")
+
         } catch (error) {
             console.log("logout Error",error);
         }

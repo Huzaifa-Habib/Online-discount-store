@@ -7,7 +7,7 @@ import {useRef,useContext} from 'react';
 import {useNavigate} from "react-router-dom"
 import { GlobalContext } from '../../context/context';
 import {MdDelete} from "react-icons/md"
-import {AiOutlineCloseCircle,AiOutlineHome,AiOutlineCheck} from "react-icons/ai"
+import {AiOutlineCloseCircle,AiOutlineHome,AiOutlineCheck,AiFillCamera} from "react-icons/ai"
 import {FaUserAlt} from "react-icons/fa"
 import {BsCart4} from "react-icons/bs"
 import BottomNavigation from '@mui/material/BottomNavigation';
@@ -15,6 +15,13 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Paper from '@mui/material/Paper';
 import * as React from 'react';
 import moment from 'moment';
+import { storage } from '../../firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import {v4} from "uuid"
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+
+
 
 function UserAccount () {
     let { state, dispatch } = useContext(GlobalContext);
@@ -25,6 +32,18 @@ function UserAccount () {
     const [isUpdateName, setIsUpdateName] = useState(false)
     const [updatedNameValue, setUpdateNameValue] = useState(null)
     const [myOrders, setMyOrders] = useState([]);
+    const [imageUpload,setImageUpload] =useState (null) 
+    const [show1, setShow1] = useState(false);
+    const handleClose = () => setShow1(false);
+    const handleShow = () => setShow1(true);
+    let navigate = useNavigate();
+
+
+
+
+    
+
+    
 
 
 
@@ -47,6 +66,48 @@ function UserAccount () {
         document.querySelector(".notificationView").style.display = "none"
       
     }
+    const updateProfile = (e) => {
+        e.preventDefault()
+        setIsSpinner(true)
+        let imageRef = ref(storage,`profileImages/${imageUpload?.name + v4()}`);
+
+        uploadBytes(imageRef, imageUpload).then((snapshot) =>{
+          console.log("Firebase Storage",snapshot)
+    
+          getDownloadURL(snapshot.ref)
+          .then((url) =>{
+            console.log("ImageURL", url)
+                axios.post(`${state.baseUrl}/api/v1/updateProfileImg`, {
+                    profileImage:url,
+                })
+    
+                .then((response) => {
+                    console.log(response);
+                    window.location.reload();
+                }, (error) => {
+                    console.log(error.message);
+                    setIsSpinner(false)
+
+                });
+    
+            })
+            .catch((e) =>{
+                console.log("Image Url Error", e)
+                setIsSpinner(false)
+
+        
+            })
+        
+        })
+        .catch((e) =>{
+          console.log("Storage Error", e)
+          setIsSpinner(false)
+    
+        })
+
+    
+    }
+
 
     const updateUserName = async (e) =>{
         e.preventDefault()
@@ -74,7 +135,6 @@ function UserAccount () {
             const response = await axios.get(`${state?.baseUrl}/api/v1/orders/${state.user._id}`);
             console.log(response.data);
             setMyOrders(response.data.data);
-            console.log(myOrders)
         } catch (error) {
             console.log(error.response.data.message);
         }
@@ -82,7 +142,26 @@ function UserAccount () {
 
     useEffect(() => {
         orders()
-      },[])
+    },[])
+
+    const logOutHandler = async () =>{
+        setIsSpinner(true)
+        try {
+            const resp  = await axios.post(`${state?.baseUrl}/api/v1/logout`,{},{ withCredentials: true})
+            console.log("Logout", resp)  
+             setIsSpinner(false)
+            dispatch({
+                type: 'USER_LOGOUT',
+                payload: null
+            })
+            navigate("/")
+               
+        } catch (error) {
+            console.log("logout Error",error);
+            setIsSpinner(false)
+        }
+    }
+
 
     return(
         <div className="main-container-userAccount">
@@ -103,6 +182,26 @@ function UserAccount () {
                 <div className="userImageDiv">
                     <img className="profileImg" src={(state?.user?.profileImage !== "")? state?.user?.profileImage : "https://img.icons8.com/color/1x/administrator-male.png"} height = "100" width="100"/>
                 </div>
+                 <AiFillCamera className="camera" onClick={handleShow} />
+                 <Modal show={show1} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                    <Modal.Title>Modal heading</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <form onSubmit={updateProfile}>
+                            <input type="file" style={{width:"100%"}}onChange={(e) => {
+                                setImageUpload(e.target.files[0])
+                            }} required accept="image/png"/>
+                               <Button variant="primary" type="submit" style={{marginTop:"20px"}}>
+                                    Update 
+                                </Button>
+                        </form>
+
+                    </Modal.Body>
+                    
+                </Modal>
+              
+
                 <div className='nameDiv'>
                     {
                         (isUpdateName)?
@@ -160,6 +259,7 @@ function UserAccount () {
                                         <div className="productInfo" key={i}>
                                             <div className="quantity">
                                                 <p>{product.quantity} x {product.productName}</p>
+                                                <p>Rs.{product.productPrice} - per {product.productUnitName}</p>
                                             </div>
 
                                         </div>
@@ -184,8 +284,9 @@ function UserAccount () {
 
                                 
                 }
-               
+               <button className='logOut' onClick={logOutHandler}>Log Out</button>
             </div>
+
             
             <div className="fixed-navbar">
                 <nav >
