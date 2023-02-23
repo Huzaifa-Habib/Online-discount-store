@@ -28,19 +28,10 @@ function App() {
   console.log(state)
 
   useEffect(() => {
-    let baseUrl = ""
-    if (window.location.href.split(":")[0] === "http") {
-      baseUrl = "http://localhost:3000";
-      
-    }
-    else{
-      baseUrl = "https://lazy-pear-caterpillar-slip.cyclic.app"
-    }
-  
 
     const getProfile = async () => {
       try {
-        let response = await axios.get(`${baseUrl}/api/v1/profile`, {
+        let response = await axios.get(`${state.baseUrl}/api/v1/profile`, {
           withCredentials: true
         })
         console.log("Profile: ", response.data);
