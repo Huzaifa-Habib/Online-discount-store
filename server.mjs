@@ -20,7 +20,7 @@ import sgMail from "@sendgrid/mail"
 const SECRET = process.env.SECRET || "mySecret"
 const app = express()
 const port = process.env.PORT || 3000
-const mongodbURI = process.env.mongodbURI || "mongodb+srv://admin:admin123@cluster0.vpuj8pq.mongodb.net/mydatabase?retryWrites=true&w=majority"
+const mongodbURI = process.env.mongodbURI || "mongodb+srv://huzaifa:fakes12@cluster0.mveqy5v.mongodb.net/?retryWrites=true&w=majority"
 mongoose.connect(mongodbURI);
 app.use(express.json());
 app.use(cookieParser())
@@ -209,83 +209,6 @@ app.post("/api/v1/updateName", async (req, res) => {
 
 })
 
-
-
-app.post("/api/v1/uploadCoverPhoto", async (req, res) =>{
-    try{
-        const body = req.body;
-        const _id = req.body.token._id;
-        const coverPhoto = body.coverPhoto
-
-        const user = await userModel.findOne(
-            { _id: _id },
-            "coverPhoto",
-        ).exec()
-        if (!user) throw new Error("User not found")
-
-        await userModel.updateOne({ _id: _id }, { coverPhoto: coverPhoto }).exec()
-  
-        res.send({
-            message: "cover image changed success",
-        });
-      
-        return;
-
-    }
-
-    catch (error) {
-        console.log("error: ", error);
-        res.status(500).send(error.message)
-    }
-
-
-})
-
-app.put("/api/v1/deleteCoverPhoto", async (req, res) =>{
-    try{
-        const body = req.body;
-        const _id = req.body.token._id;
-
-        const user = await userModel.findOne(
-            { _id: _id },
-        ).exec()
-        if (!user){
-            throw new Error("User not found") 
-            
-
-        }
-        else{
-            let data = await userModel.findByIdAndUpdate(_id,
-                {
-                    coverPhoto: "",
-                  
-                },
-                { new: true }
-            ).exec();
-    
-            console.log('updated: ', data);
-    
-            res.send({
-                message: "cover image remove success",
-            });
-        }
-
-
-
-  
-        
-      
-        return;
-
-    }
-
-    catch (error) {
-        console.log("error: ", error);
-        res.status(500).send(error.message)
-    }
-
-
-})
 
 app.delete('/api/v1/deleteAccount/:deleteAccountEmail', (req, res) => {
     const email = req.params.deleteAccountEmail

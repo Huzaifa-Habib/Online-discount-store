@@ -1,33 +1,43 @@
 import "./signup.css"
-import { useState,useRef } from 'react';
+import { useState,useRef,useContext } from 'react';
+import { GlobalContext } from '../../context/context';
 import axios from "axios"
 import {useNavigate} from "react-router-dom"
 import { storage } from '../../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {v4} from "uuid"
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import {BiUser} from "react-icons/bi"
+import {MdEmail} from "react-icons/md"
+import {AiFillLock,AiOutlinePlus,AiOutlineCloseCircle} from "react-icons/ai"
+import Button from 'react-bootstrap/Button';
 
-let baseUrl = ""
-if (window.location.href.split(":")[0] === "http") {
-  baseUrl = "http://localhost:3000";
-  
-}
-else{
-    baseUrl = "https://lazy-pear-caterpillar-slip.cyclic.app"
-  }
+
+
 
 function Signup() {
     axios.defaults.withCredentials = true
-
-    const firstRef = useRef(null);
-    const secondRef = useRef(null);
-    const thirdRef = useRef(null);
-    const fourthRef = useRef(null);
-    const fifthRef = useRef(null);
     const [fullName,setFullName] =useState ("") 
     const [email,setEmail] =useState ("") 
     const [password,setPassword] =useState ("") 
     let navigate = useNavigate();
     const [imageUpload,setImageUpload] =useState (null) 
+    let { state, dispatch } = useContext(GlobalContext);
+    const [error, setError] = useState("");
+    const [show, setShow] = useState(null);
+
+    
+    if (show === true) {
+      document.querySelector(".notificationView").style.display = "block"
+    
+     }
+
+    if (show === false) {
+        document.querySelector(".notificationView").style.display = "none"
+      
+    }
+
 
 
     const signUpHandler = (event)=>{
@@ -44,7 +54,7 @@ function Signup() {
                 getDownloadURL(snapshot.ref)
                 .then((url) =>{
                     console.log("ImageURL", url)
-                        axios.post(`${baseUrl}/api/v1/signup`, {
+                        axios.post(`${state.baseUrl}/api/v1/signup`, {
                             fullName: fullName,   
                             email:email,
                             password:password,
@@ -77,7 +87,7 @@ function Signup() {
         }
 
         else{
-            axios.post(`${baseUrl}/api/v1/signup`, {
+            axios.post(`${state.baseUrl}/api/v1/signup`, {
                 fullName: fullName,   
                 email:email,
                 password:password,
@@ -90,9 +100,9 @@ function Signup() {
                 navigate("/")
 
             }, (error) => {
-                console.log(error);
-                alertDiv.style.display = "block"
-                errorDiv.textContent = error?.response?.data?.message
+                setShow(true)
+                console.log(error.response);
+                setError(error.response.data.message)
             });
 
         }
@@ -100,62 +110,96 @@ function Signup() {
 
     }
     
-    const closeHandler = () =>{
-        let alertDiv = document.getElementById("alert")
-        alertDiv.style.display = "none"
-  
-    }
-
+ 
 
     return (
 
-        <div className='main-div'>
-            <nav className='nav'>
-                <img src="https://img.icons8.com/fluency/512/twitter.png" alt="" height="40" width="40" />
-
-                <div className='right-side'>
-                    <a href="/">Login</a>
-                    <a href="/signup">Sign Up</a>
-
-                </div>     
-            </nav>           
-            <div className="alerts-div" id="alert">
-                <div className="error-div">
-                    <p id="error"></p>
-                    <button onClick={closeHandler}>Ok</button>
-
-                </div>
-
-
+        <div className='signup-main-div'>
+                   
+            <div className='notificationView' >
+                <div className="notification">
+                    <AiOutlineCloseCircle style={{marginLeft:"auto",cursor:"pointer",fontSize:"18px",position:"relative",top:"-10px",right:"-10px"} }onClick= {() => setShow(false)}/>
+                    <p className="notification-message">{error} </p>
+                </div> 
             </div>
 
 
             <div className='signUp-sub-div'>
                 <h3>Register Yourself</h3>
                 <form onSubmit={signUpHandler} className = "submitForm">
-                    <input ref={firstRef} type="text" placeholder="Enter Full Name" required onChange={(e) =>{
-                        setFullName(e.target.value)
+                    <InputGroup className="mb-3" >
+                        <InputGroup.Text id="basic-addon1" style={{background:"none", border:"1px solid rgba(128, 128, 128, 0.39)",borderRight:"none"}}>
+                            <BiUser style={{color:"white",fontSize:"25px"}}/>
+                        </InputGroup.Text>
+                        <Form.Control
+                            placeholder="Username"
+                            aria-label="Username"
+                            aria-describedby="basic-addon1"
+                            onChange={(e) => {setFullName(e.target.value)}}
+                            required
+                            type="text"
+                            style={{textTransform:"capitalize"}}
+                        />
+                    </InputGroup>
 
-                    }} />
 
                     
-                    <input ref={thirdRef} className="mail-input" type="email" placeholder="Enter Email" required onChange={(e) =>{
-                            setEmail(e.target.value)
+                    <InputGroup className="mb-3" >
+                        <InputGroup.Text id="basic-addon1" style={{background:"none", border:"1px solid rgba(128, 128, 128, 0.39)",borderRight:"none"}}>
+                            <MdEmail style={{color:"white",fontSize:"25px"}}/>
+                        </InputGroup.Text>
+                        <Form.Control
+                            placeholder="Email"
+                            aria-label="Email"
+                            aria-describedby="basic-addon1"
+                            onChange={(e) => {setEmail(e.target.value)}}
+                            required
+                            type="email"
 
-                        }} />
-                    <input ref={fourthRef} type="password" placeholder="Enter Password" required onChange={(e) =>{
-                            setPassword(e.target.value)
 
-                        }} />
-                    <label className="signUp-profileImg">Profile Picture</label>
+                            
+                        />
+                    </InputGroup>
 
-                    <input ref={fifthRef} type="file"  name='profilePic' accept='image/png, image/jpg, image.jpeg'  id='imgInput' onChange={(e) => {
-                            setImageUpload(e.target.files[0])
-                    }}/>
+                    <InputGroup className="mb-3">
+                        <InputGroup.Text id="basic-addon1" style={{background:"none", border:"1px solid rgba(128, 128, 128, 0.39)",borderRight:"none"}}>
+                            <AiFillLock style={{color:"white",fontSize:"25px"}}/>
+                        </InputGroup.Text>
+                        <Form.Control
+                            placeholder="Password"
+                            aria-label="Password"
+                            aria-describedby="basic-addon1"
+                            onChange={(e) => {setPassword(e.target.value)}}
+                            required
+                            type="password"
 
-                    <button type="submit">Register</button>
+
+                            
+                        />
+                    </InputGroup>
+
+                    <InputGroup className="mb-3" >
+                        <label htmlFor="imageInput" style={{width:"100%"}}>  
+                            <div className="uploadDiv"><AiOutlinePlus style={{color:"white", fontWeight:"bold", fontSize:"30px", marginRight:"5px"}}/> Upload Profile</div>
+                        </label>
+                            <Form.Control
+                                placeholder="Profile Image"
+                                aria-label="Profile Image"
+                                aria-describedby="basic-addon1"
+                                id="imageInput"
+                                type="file"
+                                style={{display:"none"}}
+                                onChange={(e) => {setImageUpload(e.target.value)}}
+
+                            />
+                    </InputGroup>
+
+                    <Button variant="primary" size="lg" active type="submit">
+                        Sign Up
+                    </Button>       
                 </form>
-                <a href="/">Already have an account LogIn.</a>
+                <br />
+                <a href="/" style={{color:"white", fontSize:"14px"}}>Already have an account? LogIn.</a>
 
                 
                 

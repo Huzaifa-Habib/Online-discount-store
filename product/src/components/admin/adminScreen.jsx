@@ -44,7 +44,7 @@ function AdminScreen() {
 
   const allProductsHandler= async ()=>{
         try {
-            const response = await axios.get(`${state?.baseUrl}/api/v1/items`)
+            const response = await axios.get(`${state?.baseUrl}/api/v1/items`,{ withCredentials: true })
             console.log("Products",response.data)
              setAllData(response.data)
         

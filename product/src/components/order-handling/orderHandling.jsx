@@ -47,7 +47,7 @@ function OrderHandling () {
 
     const allOrders = async () => {
         try {
-            const response = await axios.get(`${state?.baseUrl}/api/v1/allOrders`);
+            const response = await axios.get(`${state?.baseUrl}/api/v1/allOrders`,{ withCredentials: true });
             console.log(response.data);
             setGetAllOrders(response.data.data);
         } catch (error) {
@@ -70,7 +70,7 @@ function OrderHandling () {
         if (orderToUpdate.orderStatus !== value) {
             orderToUpdate.orderStatus = value;
             // make API call to update the order in the database
-            axios.put(`${state?.baseUrl}/api/v1/updateStatus/${orderId}`, { orderStatus: value })
+            axios.put(`${state?.baseUrl}/api/v1/updateStatus/${orderId}`, { orderStatus: value },{ withCredentials: true })
             .then(res => {
                 console.log(res.data);
                 allOrders()

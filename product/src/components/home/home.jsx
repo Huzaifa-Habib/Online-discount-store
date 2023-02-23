@@ -60,7 +60,7 @@ function Home (){
 
     const getCategoriesHandler = async () =>{
         try {
-            const response = await axios.get(`${state?.baseUrl}/api/v1/categories`)
+            const response = await axios.get(`${state?.baseUrl}/api/v1/categories`,{ withCredentials: true })
             console.log("Categories",response.data)
               setGetAllCategories(response.data.data)
         
@@ -72,9 +72,12 @@ function Home (){
     const allProductsHandler= async (e)=>{
       if (e) e.preventDefault();
         try {
-          const response = await axios.get(`${state?.baseUrl}/api/v1/items?q=${searchTerm}`)
+          const response = await axios.get(`${state?.baseUrl}/api/v1/items?q=${searchTerm}`,{ withCredentials: true })
             console.log("Products",response.data)
             setAllData(response.data)
+            if (e){
+                e.target.reset()
+            }
         
         } catch (error) {
             console.log("error in getting all Product", error);
@@ -94,7 +97,7 @@ function Home (){
               productPrice,
               productUnitName,
               quantity:1
-            });
+            },{ withCredentials: true });
             console.log(response.data);
             setIsSpinner(false)
             setShow(true)

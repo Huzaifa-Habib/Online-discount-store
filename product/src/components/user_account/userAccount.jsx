@@ -79,7 +79,7 @@ function UserAccount () {
             console.log("ImageURL", url)
                 axios.post(`${state.baseUrl}/api/v1/updateProfileImg`, {
                     profileImage:url,
-                })
+                },{ withCredentials: true })
     
                 .then((response) => {
                     console.log(response);
@@ -132,7 +132,7 @@ function UserAccount () {
 
     const orders = async () => {
         try {
-            const response = await axios.get(`${state?.baseUrl}/api/v1/orders/${state.user._id}`);
+            const response = await axios.get(`${state?.baseUrl}/api/v1/orders/${state.user._id}`,{ withCredentials: true });
             console.log(response.data);
             setMyOrders(response.data.data);
         } catch (error) {
@@ -178,7 +178,7 @@ function UserAccount () {
                 </div> 
             </div>
             <div className="userAccountInfoDiv">
-                <h3 style={{color:"#024F9D"}}>Settings</h3>
+                <h3 style={{color:"#024F9D",textAlign:"center"}}>Settings</h3>
                 <div className="userImageDiv">
                     <img className="profileImg" src={(state?.user?.profileImage !== "")? state?.user?.profileImage : "https://img.icons8.com/color/1x/administrator-male.png"} height = "100" width="100"/>
                 </div>

@@ -1,13 +1,102 @@
+.forget-main-div{
+    background-image: url("https://img.freepik.com/free-vector/halftone-background-with-circles_23-2148907689.jpg?w=740&t=st=1677159099~exp=1677159699~hmac=7dd8d767bb365ddbdd0bc339e5d496ff6aaa9b80b92c8812f2038756675b6529");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif;
+}
+
+.forget-nav{
+    display: flex;
+    padding: 10px;
+    color: white;
+}
+
+.forget-nav a{
+    color: white;
+    text-decoration: none;
+    padding-top: 3px;
+}
 
 .forget-sub-div{
     margin-left: auto;
     margin-right: auto;
     width: calc(40vw);
-    background-color: white;
     padding-left: 10px;
     margin-top: 40px;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    box-shadow: 0 0 10px 0px white;
     border-radius: 10px;
     padding-bottom: 20px;
 }
+
+.forget-sub-div h3{
+    color: white;
+    text-align: center;
+    padding-top: 20px;
+    margin-bottom: 20px;
+}
+
+.forget-sub-div input{
+    background: none !important;
+    border: 1px solid rgba(128, 128, 128, 0.39);
+    color: white !important;
+    border-left: none;
+    margin-right: 10px;
+}
+
+.forget-sub-div input:focus{
+    box-shadow: none !important;
+    border: 1px solid rgba(128, 128, 128, 0.39);
+    border-left: none;
+}
+
+.forget-sub-div button{
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+ 
+}
+
+
+
+@media screen and (max-width:800px) {
+    .forget-sub-div{
+        width: calc(50vw) !important;
+    }
+
+
+}
+
+@media screen and (max-width:650px) {
+    .forget-sub-div{
+        width: calc(70vw) !important;
+    }
+
+  
+
+
+}
+
+@media screen and (max-width:450px) {
+    .forget-sub-div{
+        width: calc(80vw) !important;
+    }
+
+   
+
+}
+
+
+@media screen and (max-width:320px) {
+    .forget-sub-div{
+        width: calc(100vw) !important;
+        border-radius: 0px;
+
+    }
+  
+
+}
+
 

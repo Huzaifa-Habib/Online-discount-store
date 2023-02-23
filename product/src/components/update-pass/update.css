@@ -1,10 +1,28 @@
+.forget-main-div{
+    background-image: url("https://img.freepik.com/free-vector/halftone-background-with-circles_23-2148907689.jpg?w=740&t=st=1677159099~exp=1677159699~hmac=7dd8d767bb365ddbdd0bc339e5d496ff6aaa9b80b92c8812f2038756675b6529");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif;
+}
+.forgetNav{
+    display: flex;
+    color: white;
+    padding: 10px;
+}
+.forgetNav a{
+    color: white;
+    text-decoration: none;
+    padding-top: 3px;
+}
 
 .center-div{
-  background-color: white;
   width: calc(45vw);
   margin-left: auto;    
   margin-right: auto;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: 0 0 10px 0px white;
   margin-top: 20px;
   border-radius: 10px;
   padding-left: 20px;
@@ -15,22 +33,17 @@
 
 }
 
-.input-2{
-    width: 90% !important;
+.center-div h3{
+    color: white;
+    text-align: center;
 }
 
-.center-div .updates{
-    margin-top: 20px !important;
-    display: flex;
-    padding: 5px 40px !important;
-    border-radius: 5px !important;
-    background-color: white !important;
-    color: dodgerblue !important;
-}
-
-.center-div .updates:hover{
-    background-color: dodgerblue !important;
+.center-div input{
+    background: none !important;
+    border: 1px solid rgba(128, 128, 128, 0.39);
     color: white !important;
+    border-left: none;
+    margin-right: 10px;
 }
 
 .spinnerDiv{
@@ -59,4 +72,44 @@
 
 
     
+}
+
+
+
+@media screen and (max-width:800px) {
+    .center-div{
+        width: calc(50vw) !important;
+    }
+
+
+}
+
+@media screen and (max-width:650px) {
+    .center-div{
+        width: calc(70vw) !important;
+    }
+
+  
+
+
+}
+
+@media screen and (max-width:450px) {
+    .center-div{
+        width: calc(80vw) !important;
+    }
+
+   
+
+}
+
+
+@media screen and (max-width:320px) {
+    .center-div{
+        width: calc(100vw) !important;
+        border-radius: 0px;
+
+    }
+  
+
 }

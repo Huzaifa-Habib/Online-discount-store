@@ -60,7 +60,7 @@ function Cart () {
   const getCartItems = async () => {
       let userId = state.user._id
       try {
-        const response = await axios.get(`${state?.baseUrl}/api/v1/cart/${userId}`);
+        const response = await axios.get(`${state?.baseUrl}/api/v1/cart/${userId}`,{ withCredentials: true });
         console.log("cart items",response?.data);
         setCartItems(response.data)
         setTotalPrice(
@@ -78,7 +78,7 @@ function Cart () {
   const removeProductFromCart = async (productId) =>{
       setIsSpinner(true)
       try {
-          const response = await axios.delete(`${state.baseUrl}/api/v1/cart/${productId}`);
+          const response = await axios.delete(`${state.baseUrl}/api/v1/cart/${productId}`,{ withCredentials: true });
           console.log(response.data.message);
           // Reload the page or update the cart state to reflect the change
           getCartItems()
@@ -95,7 +95,7 @@ function Cart () {
       if(cartItems.length !== 0){
           setIsSpinner(true)
           try {
-              const resp =  await axios.delete(`${state.baseUrl}/api/v1/deleteCarts/`);
+              const resp =  await axios.delete(`${state.baseUrl}/api/v1/deleteCarts/`,{ withCredentials: true });
               console.log(resp)
               getCartItems()
               setIsSpinner(false)
@@ -130,7 +130,7 @@ function Cart () {
         return cartItem;
       });
       
-      axios.put(`${state.baseUrl}/api/v1/cart/${productId}`, { quantity: updatedCartItems.find(item => item.productId === productId).quantity })
+      axios.put(`${state.baseUrl}/api/v1/cart/${productId}`, { quantity: updatedCartItems.find(item => item.productId === productId).quantity },{ withCredentials: true })
         .then((response) => {
           console.log(response.data);
           getCartItems();
@@ -169,7 +169,7 @@ function Cart () {
     if (quantityDecremented) {
       setIsSpinner(true)
   
-      axios.put(`${state.baseUrl}/api/v1/cart/${productId}`, {quantity: updatedCartItems.find(item => item.productId === productId).quantity})
+      axios.put(`${state.baseUrl}/api/v1/cart/${productId}`, {quantity: updatedCartItems.find(item => item.productId === productId).quantity},{ withCredentials: true })
         .then((response) => {
           console.log(response.data);
           setIsSpinner(false);
@@ -320,6 +320,7 @@ function Cart () {
                         onChange={(e) =>{setName(e.target.value)}}
                         placeholder = "Full Name"
                         required
+                        style={{textTransform:"capitalize"}}
 
                         />
                     </div>

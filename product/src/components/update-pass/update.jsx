@@ -6,23 +6,11 @@ import Toast from 'react-bootstrap/Toast';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import ToastContainer from 'react-bootstrap/ToastContainer';
-
-
+import {AiFillLock,AiOutlineCloseCircle} from "react-icons/ai"
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import "./update.css"
 
-
-
-
-
-
-let baseUrl = ""
-if (window.location.href.split(":")[0] === "http") {
-  baseUrl = "http://localhost:3000";
-  
-}
-else{
-  baseUrl = "https://lazy-pear-caterpillar-slip.cyclic.app"
-}
 
 
 
@@ -34,6 +22,19 @@ function UpdatePassword() {
     const secondRef = useRef(null);
     const [isSpinner, setIsSpinner] = useState(null)
     const [show, setShow] = useState(false);
+    const [error, setError] = useState("");
+    const [showNote, setShowNote] = useState(null);
+
+    
+    if (showNote === true) {
+      document.querySelector(".notificationView").style.display = "block"
+    
+     }
+
+    if (showNote === false) {
+        document.querySelector(".notificationView").style.display = "none"
+      
+    }
 
     if (isSpinner === true) {
         document.querySelector(".spinnerDiv").style.display = "block"
@@ -48,7 +49,7 @@ function UpdatePassword() {
 
 
     const logoutHandler = () =>{
-        axios.get(`${baseUrl}/api/v1/logout`,{
+        axios.get(`${state.baseUrl}/api/v1/logout`,{
         withCredentials: true
         })
     
@@ -73,7 +74,7 @@ function UpdatePassword() {
         let errorDiv = document.getElementById("error")
         let alertDiv = document.getElementById("alert")
         e.preventDefault()
-        axios.post(`${baseUrl}/api/v1/change-password`,{
+        axios.post(`${state.baseUrl}/api/v1/change-password`,{
             currentPassword: currentPass,
             password: newPass
         },{withCredentials: true})
@@ -108,7 +109,7 @@ function UpdatePassword() {
     
 
     return(
-        <div className='main-div'>
+        <div className='forget-main-div'>
             <div className="alerts-div" id="alert">
                 <div className="error-div">
                 <p id="error"></p>
@@ -129,30 +130,48 @@ function UpdatePassword() {
                 </Toast>
             </ToastContainer>
 
-            <div className='leftPannel'>
+            <div className='forgetNav'>
+                <h3>Online Store</h3>
 
-                <div className='icons'>
-                <p><a href="/"><img src="https://img.icons8.com/fluency/512/twitter.png" alt="twitter logo" height="40" width="40" /></a> </p>
-                <p><a href="/profile"><img src="https://img.icons8.com/material-rounded/512/gender-neutral-user.png" alt="profile" title='profile' height="40" width="40" /></a></p> 
-                <p><img src={state?.user?.profileImage} alt='account' height="40" width="40" onClick={logoutHandler}/></p> 
-                <p><a href="update-password"><img src="https://img.icons8.com/ios-glyphs/512/approve-and-update.png" alt='account' height="40" width="40"/></a></p> 
+                <div style={{marginLeft:"auto"}}>
+                    <a href="/">Login</a>
+
                 </div>
+
+                
             </div>
 
             <div className='center-div'>
                 <h3>Update Password</h3>
                 <form onSubmit={updatePasswordHandler}>
-                    <input type="text" ref={firstRef} placeholder='Enter Your Current Password' onChange={(e) =>{
-                        setCurrentPass(e.target.value)
+                    <InputGroup className="mb-3">
+                        <InputGroup.Text id="basic-addon1" style={{background:"none", border:"1px solid rgba(128, 128, 128, 0.39)",borderRight:"none"}}>
+                            <AiFillLock style={{color:"white",fontSize:"25px"}}/>
+                        </InputGroup.Text>
+                        <Form.Control
+                            placeholder="Current Password"
+                            aria-label="Password"
+                            aria-describedby="basic-addon1"
+                            onChange={(e) => {setCurrentPass(e.target.value)}}
+                            required
+                            type="password"   
+                        />
+                    </InputGroup>
 
-                    }} required />
-                    <input type="text" ref={secondRef} placeholder='Enter Your New Password'onChange={(e) =>{
-                        setNewPass(e.target.value)
-
-                    }} required
-                      />
-                    <Button variant="outline-primary" type='submit' className='updates'>Update</Button>
-
+                    <InputGroup className="mb-3">
+                        <InputGroup.Text id="basic-addon1" style={{background:"none", border:"1px solid rgba(128, 128, 128, 0.39)",borderRight:"none"}}>
+                            <AiFillLock style={{color:"white",fontSize:"25px"}}/>
+                        </InputGroup.Text>
+                        <Form.Control
+                            placeholder="New Password"
+                            aria-label="Password"
+                            aria-describedby="basic-addon1"
+                            onChange={(e) => {setNewPass(e.target.value)}}
+                            required
+                            type="password"   
+                        />
+                    </InputGroup>
+                    <Button variant="primary">Primary</Button>
 
 
                 </form>

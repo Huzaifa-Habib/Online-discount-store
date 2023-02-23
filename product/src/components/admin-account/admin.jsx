@@ -62,7 +62,7 @@ function AdminAccount () {
             console.log("ImageURL", url)
                 axios.post(`${state.baseUrl}/api/v1/updateProfileImg`, {
                     profileImage:url,
-                })
+                },{ withCredentials: true })
     
                 .then((response) => {
                     console.log(response);
@@ -113,7 +113,7 @@ function AdminAccount () {
 
     const getCategoriesHandler = async () =>{
         try {
-            const response = await axios.get(`${state?.baseUrl}/api/v1/categories`)
+            const response = await axios.get(`${state?.baseUrl}/api/v1/categories`,{ withCredentials: true })
             console.log("Categories",response.data)
              setgetCategories(response.data.data)
         

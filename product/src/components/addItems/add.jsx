@@ -166,22 +166,20 @@ useEffect(() => {
                         setProductName(e.target.value)
                     }} required />
 
-                    <select required name="categories" id="categories" style={{width:"94%",padding:"5px", marginTop:"10px",backgroundColor:"rgba(128, 128, 128, 0.212)",border:"none", borderRadius:"5px",textTransform:"capitalize",fontWeight:"bold",}}>
                         {
                             (getAllCategories.length === 0)?<p>Add Category First</p>:
                             <>
-                            { getAllCategories.map((eachCategory, i) => (  
-                                <>
-                                  <option style={{textTransform:"capitalize",fontWeight:"bold"}}>{eachCategory?.name}</option>
-                                </>
-                        ))}
+                                <select required name="categories" id="categories" style={{width:"94%",padding:"5px", marginTop:"10px",backgroundColor:"rgba(128, 128, 128, 0.212)",border:"none", borderRadius:"5px",textTransform:"capitalize",fontWeight:"bold",}}>
+                                    { getAllCategories.map((eachCategory, i) => (                                
+                                        <option key={i} style={{textTransform:"capitalize",fontWeight:"bold"}}>{eachCategory?.name}</option> 
+                                    ))}
+                                </select>
             
-                    </>
+                             </>
             
 
 
                         }
-                    </select>
                         
 
 

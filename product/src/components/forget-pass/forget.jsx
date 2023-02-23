@@ -1,21 +1,17 @@
 import axios from "axios"
 import {useState,useContext,useRef} from 'react';
 import {useNavigate} from "react-router-dom"
-
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import {MdEmail} from "react-icons/md"
+import Button from 'react-bootstrap/Button';
+import {AiFillLock,AiOutlineCloseCircle} from "react-icons/ai"
+import { GlobalContext } from '../../context/context';
 import "./forget.css"
 
 
 
 
-let baseUrl = ""
-if (window.location.href.split(":")[0] === "http") {
-  baseUrl = "http://localhost:3000";
-  
-}
-
-else{
-  baseUrl = "https://lazy-pear-caterpillar-slip.cyclic.app"
-}
 
 
 function ForgetPass() {
@@ -24,12 +20,28 @@ function ForgetPass() {
     const [otp, setOtp] = useState(null)
     const [newPass, setNewPass] = useState(null)
     let navigate = useNavigate();
+    const [error, setError] = useState("");
+    const [show, setShow] = useState(null);
+    let { state, dispatch } = useContext(GlobalContext);
+
+
+    
+    if (show === true) {
+      document.querySelector(".notificationView").style.display = "block"
+    
+     }
+
+    if (show === false) {
+        document.querySelector(".notificationView").style.display = "none"
+      
+    }
 
 
 
 
-    const OtpRequestHandler = (()=>{
-        axios.post(`${baseUrl}/api/v1/forget-password`, {
+    const OtpRequestHandler = ((e)=>{
+      e.preventDefault()
+        axios.post(`${state.baseUrl}/api/v1/forget-password`, {
             email:verifyEmail,
           },{ withCredentials: true })
 
@@ -37,7 +49,9 @@ function ForgetPass() {
             console.log(response.data.message);
             setIsOtpSent(true)
           }, (error) => {
-            console.log(error);    
+            setShow(true)
+            console.log(error.response);
+            setError(error.response.data.message)
           });
       
 
@@ -45,7 +59,7 @@ function ForgetPass() {
 
     const changePassHandler = ((e)=>{
       e.preventDefault()
-      axios.post(`${baseUrl}/api/v1/forget-password-2`, {
+      axios.post(`${state.baseUrl}/api/v1/forget-password-2`, {
           email:verifyEmail,
           otp:otp,
           newPassword:newPass
@@ -56,7 +70,10 @@ function ForgetPass() {
           navigate("/")
 
         }, (error) => {
-          console.log(error);    
+            setShow(true)
+            console.log(error.response);
+            setError(error.response.data.message)
+
         });
      }) 
 
@@ -65,44 +82,75 @@ function ForgetPass() {
     return(
       
       
-        <div className="mainn-div">
-           <nav className='nav'>
-                <img src="https://img.icons8.com/fluency/512/twitter.png" alt="" height="40" width="40" />
-
-                <div className='right-side'>
+        <div className="forget-main-div">
+          <div className='notificationView' >
+            <div className="notification">
+                <AiOutlineCloseCircle style={{marginLeft:"auto",cursor:"pointer",fontSize:"18px",position:"relative",top:"-10px",right:"-10px"} }onClick= {() => setShow(false)}/>
+                <p className="notification-message">{error} </p>
+            </div> 
+          </div>
+           <nav className='forget-nav'>
+           <h3>Online Store</h3>
+              <div style={{marginLeft:"auto"}}>
                 <a href="/">Login</a>
-                <a href="/signup">Sign Up</a>
-
-                </div>     
+              </div>     
             </nav>
           <div className="forget-sub-div">
 
 
           
-         <h3>Reset Your Password</h3>
+         <h3>Update Your Password</h3>
 
           {(isOtpSent == false)?
-          <div>
-            <input type="email" placeholder="Enter Email" onChange={(e) =>{
-                setVerifyEmail(e.target.value)
-             }}/>
+          <form onSubmit={OtpRequestHandler}>
+              <InputGroup className="mb-3" >
+                <InputGroup.Text id="basic-addon1" style={{background:"none", border:"1px solid rgba(128, 128, 128, 0.39)",borderRight:"none"}}>
+                    <MdEmail style={{color:"white",fontSize:"25px"}}/>
+                </InputGroup.Text>
+                <Form.Control
+                    placeholder="Email"
+                    aria-label="Email"
+                    aria-describedby="basic-addon1"
+                    onChange={(e) => {setVerifyEmail(e.target.value)}}
+                    required
+                    type="email"
 
-             <button onClick={OtpRequestHandler}>Send OTP</button>
-             <a href="forget-pass-with-sms" style={{display:"none"}}>Send SMS?</a>
-
-          </div>
+                />
+              </InputGroup>
+              <Button variant="primary" type="submit" >Send OTP</Button>
+          </form>
     
           :
           <div>
             <form onSubmit={changePassHandler}>
-              <input type="number" placeholder="Enter Your OTP"onChange={(e) =>{
-                setOtp(e.target.value)
-             }} /> 
-              <input type="text" placeholder="Enter Your New Password"onChange={(e) =>{
-                setNewPass(e.target.value)
-             }}
+            <InputGroup className="mb-3" >
+              <InputGroup.Text id="basic-addon1" style={{background:"none", border:"1px solid rgba(128, 128, 128, 0.39)",borderRight:"none"}}>
+                  <AiFillLock style={{color:"white",fontSize:"25px"}}/>
+              </InputGroup.Text>
+              <Form.Control
+                  placeholder="OTP"
+                  aria-label="OTP"
+                  aria-describedby="basic-addon1"
+                  onChange={(e) => {setOtp(e.target.value)}}
+                  required
+                  type="number"
               />
-              <button type="submit">Update</button>
+            </InputGroup>
+             
+             <InputGroup className="mb-3">
+                  <InputGroup.Text id="basic-addon1" style={{background:"none", border:"1px solid rgba(128, 128, 128, 0.39)",borderRight:"none"}}>
+                      <AiFillLock style={{color:"white",fontSize:"25px"}}/>
+                  </InputGroup.Text>
+                  <Form.Control
+                      placeholder="Password"
+                      aria-label="Password"
+                      aria-describedby="basic-addon1"
+                      onChange={(e) => {setNewPass(e.target.value)}}
+                      required
+                      type="password"   
+                  />
+              </InputGroup>
+              <Button variant="primary" type="submit">Update</Button>
 
             </form>
             

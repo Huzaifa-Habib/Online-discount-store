@@ -118,8 +118,8 @@ router.post("/login", (req, res) => {
                         console.log("isMatched: ", isMatched);
 
                         if (isMatched) {
-                            if(data.email === "admin@gmail.com"){
-                                userModel.updateOne({ email: "admin@gmail.com"}, { isAdmin: true }).exec()
+                            if(data.email === "huzaifahabib@gmail.com"){
+                                userModel.updateOne({ email: "huzaifahabib@gmail.com"}, { isAdmin: true }).exec()
                             }
 
                             const token = jwt.sign({
@@ -412,7 +412,6 @@ router.post('/forget-password-2', async (req, res) => {
     try {
 
         let body = req.body;
-        body.email = body.email.toLowerCase();
 
         if (
             !body.email

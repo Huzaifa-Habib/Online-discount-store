@@ -1,68 +1,78 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
 
-body{
-    margin: 0px;
-    padding: 0px;
-    font-family: 'Roboto', sans-serif;
-    background-color: rgba(128, 128, 128, 0.082);
-    
+
+
+.signup-main-div{
+  background-image: url("https://img.freepik.com/free-vector/halftone-background-with-circles_23-2148907689.jpg?w=740&t=st=1677159099~exp=1677159699~hmac=7dd8d767bb365ddbdd0bc339e5d496ff6aaa9b80b92c8812f2038756675b6529");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Roboto', sans-serif;
+
+
 }
 
 .signUp-sub-div{
     margin-left: auto;
     margin-right: auto;
     width: calc(40vw);
-    background-color: white;
     padding-left: 10px;
-    margin-top: 40px;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    margin-top: 50px;
     border-radius: 10px;
     padding-bottom: 20px;
-
+    box-shadow: 0 0 10px 0px white;
 
 
 }
 
-h3{
+.signUp-sub-div h3{
     padding-top: 10px;
     text-align: center;
     text-transform: capitalize;
-    color: #27272a;
+    color: white;
 }
 
+.signUp-sub-div input{
+    background: none !important;
+    border: 1px solid rgba(128, 128, 128, 0.39);
+    color: white !important;
+    border-left: none;
+    margin-right: 10px;
 
-.submitForm input{
-    width: 90%;
-    padding: 5px 10px;
-    margin-top: 20px;
-    border: 1px solid rgba(0, 0, 0, 0.11);
-    background-color: white;
-    border-radius: 5px;
- 
 }
 
-
-input:focus{
-    outline: 2px solid dodgerblue;
-}
-
-.mail-nput{
-    margin-top: 20px;
-}
-
-.name-div input{
-    width: 48%;
+.signUp-sub-div input:focus{
+    box-shadow: none !important;
+    border: 1px solid rgba(128, 128, 128, 0.39);
+    border-left: none;
 
 
 }
 
-.name-div input:nth-child(2){
-    margin-left: 10px;
-    
-
+.signUp-sub-div input::placeholder{
+    color: rgba(128, 128, 128, 0.918);
 }
 
-.submitForm button{
+.uploadDiv{
+    width: 95%;
+    border: 1px solid white;
+    padding: 10px 0px;
+    border-radius: 30px;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+
+
+
+
+.signUp-sub-div button{
     display: flex;
     margin-left: auto;
     margin-right: auto;
@@ -76,50 +86,17 @@ input:focus{
     letter-spacing: 0.2em;
     border-radius: 5px;
 }
-.nav{
-    width: 100% ;
-    background-color: #171717;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 60px;
-    padding-top: 10px;
-  
-    
-  }
-  
-  .nav img{
-    margin-left: 10px;
-  }
-  
-  .right-side{
-    padding-right: 20px;
-    padding-top: 10px;
-  
-  }
-  
-  .right-side a{
-    margin-left: 20px;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    border-bottom: 4px solid dodgerblue;
-  }
-  
-  .right-side a:hover{
-    color: white;
-  }
 
+  
   .signUp-profileImg{
     position: relative;
     top: 20px;
     font-weight: bold;
     font-size: 17px;
-  }
+    color: white;
 
-  .signUp-profileImg sup{
-    color: gray;
-    padding-left: 2px;
+
+
   }
 
 
@@ -166,7 +143,8 @@ input:focus{
 
 @media screen and (max-width:320px) {
     .signUp-sub-div{
-        width: calc(90vw) !important;
+        width: calc(100vw) !important;
+        border-radius: 0px;
     }
     .submitForm button{
         padding: 5px 20px;
