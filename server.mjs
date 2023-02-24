@@ -19,13 +19,13 @@ import sgMail from "@sendgrid/mail"
 
 const SECRET = process.env.SECRET || "mySecret"
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 5001
 const mongodbURI = process.env.mongodbURI || "mongodb+srv://huzaifa:fakes12@cluster0.mveqy5v.mongodb.net/?retryWrites=true&w=majority"
 mongoose.connect(mongodbURI);
 app.use(express.json());
 app.use(cookieParser())
 app.use(cors({
-    origin: ['http://localhost:3001', '*'],
+    origin: ['http://localhost:5001', '*'],
     credentials: true
 
 }));

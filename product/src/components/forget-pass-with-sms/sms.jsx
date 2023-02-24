@@ -1,20 +1,9 @@
 import axios from "axios"
 import {useState,useContext,useRef} from 'react';
 import {useNavigate} from "react-router-dom"
+import { GlobalContext } from '../../context/context';
+
 import "./sms.css"
-
-
-
-
-let baseUrl = ""
-if (window.location.href.split(":")[0] === "http") {
-  baseUrl = "http://localhost:3000";
-  
-}
-
-else{
-  baseUrl = "https://lazy-pear-caterpillar-slip.cyclic.app"
-}
 
 
 function ForgetPassWithSms() {
@@ -23,15 +12,14 @@ function ForgetPassWithSms() {
     const [otp, setOtp] = useState(null)
     const [newPass, setNewPass] = useState(null)
     const [number, setNumber] = useState(null)
-
-
+    let { state, dispatch } = useContext(GlobalContext);
     let navigate = useNavigate();
 
 
 
 
     const OtpRequestHandlerViaSms = (()=>{
-        axios.post(`${baseUrl}/api/v1/forget-password-via-sms`, {
+        axios.post(`${state.bseUrl}/api/v1/forget-password-via-sms`, {
             email:verifyEmail,
             number:Number(number)
             
@@ -50,7 +38,7 @@ function ForgetPassWithSms() {
 
     const changePassHandler = ((e)=>{
       e.preventDefault()
-      axios.post(`${baseUrl}/api/v1/forget-password-2`, {
+      axios.post(`${state.baseUrl}/api/v1/forget-password-2`, {
           email:verifyEmail,
           otp:otp,
           newPassword:newPass
