@@ -9,6 +9,8 @@ import {BiUser} from "react-icons/bi"
 import {MdEmail} from "react-icons/md"
 import {AiFillLock,AiOutlineCloseCircle} from "react-icons/ai"
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
+
 
 
 
@@ -26,6 +28,18 @@ function Login() {
     let { state, dispatch } = useContext(GlobalContext);
     const [error, setError] = useState("");
     const [show, setShow] = useState(null);
+    const [isSpinner, setIsSpinner] = useState(null)
+
+
+    
+    if (isSpinner === true) {
+        document.querySelector(".spinner-div").style.display = "block"
+      
+    }
+  
+    if (isSpinner === false) {
+        document.querySelector(".spinner-div").style.display = "none"
+    }
 
     
     if (show === true) {
@@ -42,8 +56,8 @@ function Login() {
 
     const loginHandler = (event)=>{
         event.preventDefault()
+        setIsSpinner(true)
        
-
 
         axios.post(`${state.baseUrl}/api/v1/login`, {
             email:email,
@@ -58,6 +72,7 @@ function Login() {
                 type: 'ADMIN_LOGIN',
                 payload: response.data.profile
               })
+              setIsSpinner(false)
               navigate("/")
               window.location.reload()
               return;
@@ -70,6 +85,8 @@ function Login() {
               })
               navigate("/")
               window.location.reload()
+              setIsSpinner(false)
+
 
             }
 
@@ -80,6 +97,8 @@ function Login() {
             setShow(true)
             console.log(error.response);
             setError(error.response.data.message)
+            setIsSpinner(false)
+
             
             
           });

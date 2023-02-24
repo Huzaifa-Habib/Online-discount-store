@@ -12,6 +12,8 @@ import {BiUser} from "react-icons/bi"
 import {MdEmail} from "react-icons/md"
 import {AiFillLock,AiOutlinePlus,AiOutlineCloseCircle} from "react-icons/ai"
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
+
 
 
 
@@ -26,6 +28,18 @@ function Signup() {
     let { state, dispatch } = useContext(GlobalContext);
     const [error, setError] = useState("");
     const [show, setShow] = useState(null);
+    const [isSpinner, setIsSpinner] = useState(null)
+
+
+    
+    if (isSpinner === true) {
+        document.querySelector(".spinner-div").style.display = "block"
+      
+    }
+  
+    if (isSpinner === false) {
+        document.querySelector(".spinner-div").style.display = "none"
+    }
 
     
     if (show === true) {
@@ -46,6 +60,7 @@ function Signup() {
         let alertDiv = document.getElementById("alert")
 
         if(imageUpload !== null){
+            setIsSpinner(true)
 
             let imageRef = ref(storage,`profileImages/${imageUpload?.name + v4()}`);
             uploadBytes(imageRef, imageUpload).then((snapshot) =>{
@@ -64,6 +79,7 @@ function Signup() {
                         .then((response) => {
                             console.log(response);
                             event.target.reset();
+                            setIsSpinner(false)
                             navigate("/")
                             
 
@@ -71,22 +87,30 @@ function Signup() {
                             console.log(error);
                             alertDiv.style.display = "block"
                             errorDiv.textContent = error?.response?.data?.message
+                            setIsSpinner(false)
+
                         });
 
                     })
                     .catch((e) =>{
                         console.log("Image Url Error", e)
+                        setIsSpinner(false)
+
                 
                     })
                 
                 })
                 .catch((e) =>{
-                console.log("Storage Error", e)
+                    console.log("Storage Error", e)
+                    setIsSpinner(false)
+
 
                 })
         }
 
         else{
+            setIsSpinner(true)
+
             axios.post(`${state.baseUrl}/api/v1/signup`, {
                 fullName: fullName,   
                 email:email,
@@ -97,12 +121,15 @@ function Signup() {
             .then((response) => {
                 console.log(response);
                 event.target.reset();
+                setIsSpinner(false)
                 navigate("/")
 
             }, (error) => {
+                setIsSpinner(false)
                 setShow(true)
                 console.log(error.response);
                 setError(error.response.data.message)
+                
             });
 
         }
