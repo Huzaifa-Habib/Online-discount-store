@@ -42,8 +42,7 @@ function Login() {
 
     const loginHandler = (event)=>{
         event.preventDefault()
-        let errorDiv = document.getElementById("error")
-        let alertDiv = document.getElementById("alert")
+       
 
 
         axios.post(`${state.baseUrl}/api/v1/login`, {
@@ -89,11 +88,7 @@ function Login() {
 
 
     }
-    const closeHandler = () =>{
-      let alertDiv = document.getElementById("alert")
-      alertDiv.style.display = "none"
 
-    }
 
     return (
 

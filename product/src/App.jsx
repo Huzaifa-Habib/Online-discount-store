@@ -24,7 +24,6 @@ axios.defaults.withCredentials = true
 
 function App() {
   let { state, dispatch } = useContext(GlobalContext);
-  const [userRes, setUserRes] = useState(null)
   console.log(state)
 
   useEffect(() => {
