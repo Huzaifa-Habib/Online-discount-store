@@ -13,6 +13,11 @@ import {IoChevronBackSharp} from "react-icons/io5"
 import {AiOutlineCloseCircle,AiOutlineHome,AiOutlineCheck,AiFillCamera} from "react-icons/ai"
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
+import {io} from "socket.io-client";
+import Toast from 'react-bootstrap/Toast';
+
+
+
 
 
 
@@ -24,9 +29,15 @@ function OrderHandling () {
     const [show, setShow] = useState(null);
     const [error, setError] = useState("");
     const [isSpinner, setIsSpinner] = useState(null)
-    const [getAllOrders, setGetAllOrders] = useState([])
     let navigate = useNavigate();
     const [selectedValues, setSelectedValues] = useState([]);
+    const [orders, setOrders] = useState([]);
+    const [notifications, setNotifications] = useState([]);
+    const [showToast, setShowToast] = useState(true);
+
+
+
+
 
 
 
@@ -49,7 +60,7 @@ function OrderHandling () {
         try {
             const response = await axios.get(`${state?.baseUrl}/api/v1/allOrders`,{ withCredentials: true });
             console.log(response.data);
-            setGetAllOrders(response.data.data);
+            setOrders(response.data.data);
         } catch (error) {
             console.log(error.response.data.message);
         }
@@ -60,12 +71,15 @@ function OrderHandling () {
     },[])
 
     useEffect(() => {
-        setSelectedValues(Array(getAllOrders.length).fill(''));
-    }, [getAllOrders]);
+        setSelectedValues(Array(orders.length).fill(''));
+    }, [orders]);
+    
 
+
+  
     const handleSelectChange = (event, orderId) => {
         const { value } = event.target;
-        const orderToUpdate = getAllOrders.find(order => order._id === orderId);
+        const orderToUpdate = orders.find(order => order._id === orderId);
 
         if (orderToUpdate.orderStatus !== value) {
             orderToUpdate.orderStatus = value;
@@ -81,12 +95,68 @@ function OrderHandling () {
         }
     };
 
+    useEffect(() => {
+        const socket = io("http://localhost:5001");
 
+        socket.on(`connect`, function (){
+            console.log("connected")
+        })
+
+        socket.on('Received Order', ({ newOrder }) => {
+            setOrders(prevOrders => [ newOrder,...prevOrders]);
+            setNotifications(prevOrders => [newOrder,...prevOrders])
+            setShowToast(true)
+
+          
+        });
+
+        socket.on('disconnect', function (message) {
+            console.log("Socket disconnected from server: ", message);
+        });
+      
+    
+        return () => {
+          socket.disconnect(); 
+        };
+      }, []);
+
+
+    const dismissNotification = (notification) => {
+        setNotifications(
+            allNotifications => allNotifications.filter(eachItem => eachItem._id !== notification._id)
+        )
+        setShow(false)
+    }
 
 
 
     return(
         <div className='main-div-orderHandling'>
+            <div className='orderNotification'>
+            {
+                    notifications.map((eachNotification, index) => {
+                        return <div key={index} className="item">
+                                    <Toast >
+                                        <img
+                                        src="holder.js/20x20?text=%20"
+                                        className="rounded me-2"
+                                        alt=""
+                                        />
+
+                                        <strong style={{float:"right", fontSize:"16px", marginRight:"10px",cursor:"pointer"}} onClick={() => { dismissNotification(eachNotification) }} className="close"> X </strong>
+                                        <small style={{ float:"right", marginRight:"10px",paddingTop:"1px"}}>{moment(eachNotification.createdOn).fromNow()}</small>
+                                            <Toast.Body>
+                                                <div style={{borderTop:"1px solid gray",marginTop:"15px", paddingTop:"10px"}}>New Order arrived from <strong style={{textTransform:"capitalize"}}>{eachNotification.userName}</strong></div>
+                                            </Toast.Body>
+
+                                      
+                                    </Toast> 
+                                </div>
+                            })
+            }
+         
+
+            </div>
             <div className='spinner-div'>
                 <div className='spinner'>
                     <Spinner animation="grow" variant="danger" />
@@ -129,10 +199,9 @@ function OrderHandling () {
             <h5 style={{color:"#024F9D", paddingLeft:"20px",marginTop:"20px"}}>Orders</h5>
 
             <div className='displayUsersOrder'>
-                {
-                                    
-                    (getAllOrders.length !== 0)?
-                        getAllOrders.map((order, i) => (
+                {         
+                    (orders?.length !== 0)?
+                        orders.map((order, i) => (
                             <div className="ordersDisplayDiv" key={i}>
                                 <div className="userName">
                                     {order.userName}
@@ -177,10 +246,11 @@ function OrderHandling () {
                         ))
                     
                     
-                    : <h4>No orders yet!</h4>
-
-                                                
-                }
+                    :null}
+                    {(orders?.length === 0 ? "No Orders Yet!" : null)}
+                    <div style={{position:"absolute", top:"50%",left: "50%"}}>
+                        {(orders === null ? <Spinner animation="grow" variant="primary" /> : null)}
+                    </div>
 
 
 

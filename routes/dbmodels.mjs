@@ -58,6 +58,7 @@ const userSchema = new mongoose.Schema({
     profileImage:{type:String},
     coverPhoto:{type:String},
     createdOn: { type: Date, default: Date.now },
+    isAdmin:{type:Boolean, default:false}
 
 });
 export const userModel = mongoose.model('Store Users', userSchema);

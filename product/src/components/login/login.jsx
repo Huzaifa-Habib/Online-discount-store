@@ -1,5 +1,5 @@
 import "./login.css"
-import { useState,useRef,useContext } from 'react';
+import { useState,useEffect,useContext } from 'react';
 import axios from "axios"
 import {useNavigate} from "react-router-dom"
 import { GlobalContext } from '../../context/context';
@@ -10,6 +10,8 @@ import {MdEmail} from "react-icons/md"
 import {AiFillLock,AiOutlineCloseCircle} from "react-icons/ai"
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
+import { io } from "socket.io-client";
+
 
 
 
@@ -108,10 +110,16 @@ function Login() {
 
     }
 
+ 
 
     return (
 
         <div className='login-main-div'>
+          <div className='spinner-div'>
+            <div className='spinner'>
+            <Spinner animation="grow" variant="danger" />
+            </div>
+          </div>
         
         <div className='notificationView' >
           <div className="notification">

@@ -10,8 +10,12 @@ import {
     stringToHash,
     varifyHash,
 } from "bcrypt-inzi"
-import { userModel,otpModel,productModel } from './routes/dbmodels.mjs'
+import { userModel,otpModel,productModel,orderModel } from './routes/dbmodels.mjs'
 import sgMail from "@sendgrid/mail"
+import { Server as socketIo } from 'socket.io';
+import { createServer } from "http";
+import cookie from 'cookie';
+
 
 
 
@@ -25,7 +29,7 @@ mongoose.connect(mongodbURI);
 app.use(express.json());
 app.use(cookieParser())
 app.use(cors({
-    origin: ['http://localhost:5001', '*'],
+    origin: ['http://localhost:3000', '*'],
     credentials: true
 
 }));
@@ -83,7 +87,7 @@ const getUser = async (req, res) => {
     }
 
     try {
-        const user = await userModel.findOne({ _id: _id }, "email fullName _id profileImage createdOn coverPhoto").exec()
+        const user = await userModel.findOne({ _id: _id }, "email fullName _id profileImage createdOn isAdmin").exec()
         if (!user) {
             res.status(404).send({})
             return;
@@ -241,6 +245,33 @@ app.delete('/api/v1/deleteAccount/:deleteAccountEmail', (req, res) => {
     
 })
 
+app.post('/api/v1/placeOrder', async (req, res) => {
+    req.body.userName = req.body.userName.toLowerCase()
+    req.body.userEmail = req.body.userEmail.toLowerCase()
+    req.body.userAddress = req.body.userAddress.toLowerCase()
+
+    const order = new orderModel({
+        userName: req.body.userName,
+        userNumber: req.body.userNumber,
+        products: req.body.products,
+        totalPrice:req.body.totalPrice,
+        userEmail:req.body.userEmail,
+        userAddress:req.body.userAddress,
+        createdOn: new Date()
+      });
+
+    try {
+      const newOrder = await order.save();
+      io.emit("Received Order", {newOrder})
+      console.log("emitting data to Admin ")
+ 
+      res.status(201).send({message:"Order received successfully and it's in now pending", orderDetail:newOrder});
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+});
+
+
 
 
 
@@ -248,7 +279,47 @@ const __dirname = path.resolve();
 app.use('/', express.static(path.join(__dirname, './product/build')))
 app.use('*', express.static(path.join(__dirname, './product/build')))
 
-app.listen(port, () => {
+
+// THIS IS THE ACTUAL SERVER WHICH IS RUNNING
+const server = createServer(app);
+
+// handing over server access to socket.io
+let io = new socketIo(server, {
+    cors: {
+        origin: ["http://localhost:3000", "https://chat-app-with-socketio-production.up.railway.app"],
+        credentials: true
+    }
+});
+
+server.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
+
+
+io.on("connection", (socket) => {
+    console.log("New client connected with id: ", socket.id);
+
+    socket.emit("topic 1", "some data")
+
+    socket.on("disconnect", (message) => {
+        console.log("Client disconnected with id: ", message);
+    });
+
+    // setInterval(() => {
+    //     io.emit("Test topic", {event:"ADDED_ITEM", data: "some data"})
+    //     console.log("emitting data to all client")
+
+    // },2000)
+
+    
+});
+
+  
+  
+  
+  
+
+
+
+
 

@@ -6,9 +6,9 @@ export const GlobalContext = createContext("Initial Value");
 let data = {
   isLogin: null,
   isAdmin:null,
-  baseUrl: (window.location.href.split(":")[0] === "http")?"http://localhost:5001":
-  "https://tender-shorts-crab.cyclic.app",
+  baseUrl: (window.location.href.split(":")[0] === "http")?"http://localhost:5001":"",
   user:{},
+
 }
 
 export default function ContextProvider({ children }) {

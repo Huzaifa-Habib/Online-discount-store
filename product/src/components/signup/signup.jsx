@@ -142,6 +142,11 @@ function Signup() {
     return (
 
         <div className='signup-main-div'>
+            <div className='spinner-div'>
+                <div className='spinner'>
+                <Spinner animation="grow" variant="danger" />
+                </div>
+            </div>
                    
             <div className='notificationView' >
                 <div className="notification">

@@ -255,48 +255,11 @@ router.delete('/deleteCarts', async (req, res) => {
     }
 });
 
-// router.put('/cart/:productId', async (req, res) => {
-//     try {
-//       const userId = req.body.token._id;
-//       const productId = req.params.productId;
-//       const quantity = req.body.quantity;
-//       await Cart.findOneAndUpdate(
-//         { userId, product: productId },
-//         { $set: { quantity } }
-//       );
-//       res.status(200).json({ message: 'Cart updated successfully' });
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ message: 'Internal server error' });
-//     }
-//   });
 
-router.post('/placeOrder', async (req, res) => {
-    req.body.userName = req.body.userName.toLowerCase()
-    req.body.userEmail = req.body.userEmail.toLowerCase()
-    req.body.userAddress = req.body.userAddress.toLowerCase()
-
-    const order = new orderModel({
-        userName: req.body.userName,
-        userNumber: req.body.userNumber,
-        products: req.body.products,
-        totalPrice:req.body.totalPrice,
-        userEmail:req.body.userEmail,
-        userAddress:req.body.userAddress,
-        createdOn: new Date()
-      });
-
-    try {
-      const newOrder = await order.save();
-      res.status(201).send({message:"Order received successfully and it's in now pending", orderDetail:newOrder});
-    } catch (err) {
-      res.status(400).json({ message: err.message });
-    }
-});
 
 router.get('/allOrders', async (req, res) => {
     try {
-      const orders = await orderModel.find();
+      const orders = await orderModel.find().sort({ _id: -1 });
   
       res.status(200).json({ success: true, data: orders });
     } catch (error) {

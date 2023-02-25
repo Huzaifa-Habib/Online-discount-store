@@ -107,20 +107,21 @@ router.post("/login", (req, res) => {
     // check if user exist
     userModel.findOne(
         { email: body.email },
-        "fullName email password profileImage  ",
+        "fullName email password profileImage isAdmin  ",
         (err, data) => {
             if (!err) {
                 console.log("data: ", data);
 
                 if (data) { // user found
+                    if(data.email === "huzaifahabib098@gmail.com"){
+                        userModel.updateOne({ email: "huzaifahabib098@gmail.com"}, { isAdmin: true }).exec()
+                    }
                     varifyHash(body.password, data.password).then(isMatched => {
 
                         console.log("isMatched: ", isMatched);
 
                         if (isMatched) {
-                            if(data.email === "huzaifahabib@gmail.com"){
-                                userModel.updateOne({ email: "huzaifahabib@gmail.com"}, { isAdmin: true }).exec()
-                            }
+                           
 
                             const token = jwt.sign({
                                 _id: data._id,
