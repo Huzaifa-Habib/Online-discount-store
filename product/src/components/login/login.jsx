@@ -11,6 +11,7 @@ import {AiFillLock,AiOutlineCloseCircle} from "react-icons/ai"
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import { io } from "socket.io-client";
+import GoogleLogin from "react-google-login"
 
 
 
@@ -56,59 +57,70 @@ function Login() {
 
 
 
-    const loginHandler = (event)=>{
-        event.preventDefault()
-        setIsSpinner(true)
-       
-
-        axios.post(`${state.baseUrl}/api/v1/login`, {
-            email:email,
-            password:password
-          },{ withCredentials: true })
-
-          .then((response) => {
-            console.log(response);
-            event.target.reset();
-            if(email === "huzaifahabib098@gmail.com"){
-              dispatch({
-                type: 'ADMIN_LOGIN',
-                payload: response.data.profile
-              })
-              setIsSpinner(false)
-              navigate("/")
-              window.location.reload()
-              return;
-              
-            }
-            else{
-              dispatch({
-                type: 'USER_LOGIN',
-                payload: response.data.profile
-              })
-              navigate("/")
-              window.location.reload()
-              setIsSpinner(false)
-
-
-            }
-
-
-
-
-          }, (error) => {
-            setShow(true)
-            console.log(error.response);
-            setError(error.response.data.message)
-            setIsSpinner(false)
-
-            
-            
-          });
+  const loginHandler = (event)=>{
+      event.preventDefault()
+      setIsSpinner(true)
       
 
+      axios.post(`${state.baseUrl}/api/v1/login`, {
+          email:email,
+          password:password
+        },{ withCredentials: true })
+
+        .then((response) => {
+          console.log(response);
+          event.target.reset();
+          if(email === "huzaifahabib098@gmail.com"){
+            dispatch({
+              type: 'ADMIN_LOGIN',
+              payload: response.data.profile
+            })
+            setIsSpinner(false)
+            navigate("/")
+            window.location.reload()
+            return;
+            
+          }
+          else{
+            dispatch({
+              type: 'USER_LOGIN',
+              payload: response.data.profile
+            })
+            navigate("/")
+            window.location.reload()
+            setIsSpinner(false)
 
 
-    }
+          }
+
+
+
+
+        }, (error) => {
+          setShow(true)
+          console.log(error.response);
+          setError(error.response.data.message)
+          setIsSpinner(false)
+
+          
+          
+        });
+    
+
+
+
+  }
+
+  const responseSuccessGoogle = (res) =>{
+    console.log(res)
+
+  }
+
+  const responseErrorGoogle = (res) =>{
+    console.log("Error " ,res)
+
+  }
+
 
  
 
@@ -165,6 +177,13 @@ function Login() {
                 <br />
                 <a href="/signup" style={{color:"white", fontSize:"14px"}}>Didn't have an account? Register.</a> <br />
                 <a href="/forget-password" style={{color:"white", fontSize:"14px"}}>Forget Password?</a>
+                <GoogleLogin
+                  clientId="145925509834-ja233hj73en3c7j5o7ngf0j1s2fuve9e.apps.googleusercontent.com"
+                  buttonText="Login"
+                  onSuccess={responseSuccessGoogle}
+                  onFailure={responseErrorGoogle}
+                  cookiePolicy={'single_host_origin'}     
+                />,
                 
                 
 

@@ -286,7 +286,7 @@ const server = createServer(app);
 // handing over server access to socket.io
 let io = new socketIo(server, {
     cors: {
-        origin: ["http://localhost:3000", "https://chat-app-with-socketio-production.up.railway.app"],
+        origin: ["http://localhost:3000", "https://tender-shorts-crab.cyclic.app"],
         credentials: true
     }
 });
