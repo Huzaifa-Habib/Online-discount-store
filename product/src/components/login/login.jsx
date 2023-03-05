@@ -10,7 +10,7 @@ import {MdEmail} from "react-icons/md"
 import {AiFillLock,AiOutlineCloseCircle} from "react-icons/ai"
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 import GoogleLogin from "react-google-login"
 
 
@@ -172,18 +172,24 @@ function Login() {
                       </InputGroup>
                       <Button variant="primary" size="lg" active type="submit">
                           Log In
-                      </Button>  
-                </form>
+                      </Button>
+                   </form>
+                   <h6 style={{textAlign:"center", color:"white", paddingTop:"10px"}}>OR</h6>
+
+                    <GoogleLogin
+                      clientId="145925509834-ja233hj73en3c7j5o7ngf0j1s2fuve9e.apps.googleusercontent.com"
+                      buttonText="Login With Google"
+                      onSuccess={responseSuccessGoogle}
+                      onFailure={responseErrorGoogle}
+                      cookiePolicy={'single_host_origin'}  
+                      className = "googleLogin"             
+                    />
+           
+
                 <br />
                 <a href="/signup" style={{color:"white", fontSize:"14px"}}>Didn't have an account? Register.</a> <br />
                 <a href="/forget-password" style={{color:"white", fontSize:"14px"}}>Forget Password?</a>
-                <GoogleLogin
-                  clientId="145925509834-ja233hj73en3c7j5o7ngf0j1s2fuve9e.apps.googleusercontent.com"
-                  buttonText="Login"
-                  onSuccess={responseSuccessGoogle}
-                  onFailure={responseErrorGoogle}
-                  cookiePolicy={'single_host_origin'}     
-                />,
+             
                 
                 
 

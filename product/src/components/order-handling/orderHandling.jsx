@@ -13,7 +13,7 @@ import {IoChevronBackSharp} from "react-icons/io5"
 import {AiOutlineCloseCircle,AiOutlineHome,AiOutlineCheck,AiFillCamera} from "react-icons/ai"
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
-import {io} from "socket.io-client";
+// import {io} from "socket.io-client";
 import Toast from 'react-bootstrap/Toast';
 
 
@@ -95,30 +95,30 @@ function OrderHandling () {
         }
     };
 
-    useEffect(() => {
-        const socket = io("http://localhost:5001");
+    // useEffect(() => {
+    //     const socket = io("http://localhost:5001");
 
-        socket.on(`connect`, function (){
-            console.log("connected")
-        })
+    //     socket.on(`connect`, function (){
+    //         console.log("connected")
+    //     })
 
-        socket.on('Received Order', ({ newOrder }) => {
-            setOrders(prevOrders => [ newOrder,...prevOrders]);
-            setNotifications(prevOrders => [newOrder,...prevOrders])
-            setShowToast(true)
+    //     socket.on('Received Order', ({ newOrder }) => {
+    //         setOrders(prevOrders => [ newOrder,...prevOrders]);
+    //         setNotifications(prevOrders => [newOrder,...prevOrders])
+    //         setShowToast(true)
 
           
-        });
+    //     });
 
-        socket.on('disconnect', function (message) {
-            console.log("Socket disconnected from server: ", message);
-        });
+    //     socket.on('disconnect', function (message) {
+    //         console.log("Socket disconnected from server: ", message);
+    //     });
       
     
-        return () => {
-          socket.disconnect(); 
-        };
-      }, []);
+    //     return () => {
+    //       socket.disconnect(); 
+    //     };
+    //   }, []);
 
 
     const dismissNotification = (notification) => {

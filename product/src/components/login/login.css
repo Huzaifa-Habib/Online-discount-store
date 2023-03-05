@@ -107,6 +107,13 @@
     margin-top: 20px;
 }
 
+.googleLogin{
+    margin-left: auto !important;
+    margin-right: auto !important;
+    display: flex !important;
+
+}
+
 
 @media screen and (max-width:800px) {
     .logIn-sub-div{
