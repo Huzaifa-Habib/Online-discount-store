@@ -117,8 +117,7 @@ function Login() {
   }
 
   const responseErrorGoogle = (res) =>{
-    console.log("Error " ,res)
-
+ 
   }
 
 
