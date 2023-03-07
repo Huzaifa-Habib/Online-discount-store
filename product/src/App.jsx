@@ -26,7 +26,6 @@ function App() {
   let { state, dispatch } = useContext(GlobalContext);
   console.log(state)
 
-  useEffect(() => {
 
     const getProfile = async () => {
       try {
@@ -65,12 +64,6 @@ function App() {
 
 
     }
-    getProfile();
-
-  }, [])
-
-  useEffect(() => {
-
     const getGoogleUsersProfile = async () => {
       try {
         let response = await axios.get(`${state.baseUrl}/api/v1/googleUsersProfile`, {
@@ -93,6 +86,8 @@ function App() {
       }
 
     }
+  useEffect(() => {
+    getProfile()
     getGoogleUsersProfile();
 
   }, [])
@@ -123,6 +118,9 @@ function App() {
         })
         dispatch({
           type: 'ADMIN_LOGOUT'
+        })
+        dispatch({
+          type: 'GOOGLE_USER_LOGOUT'
         })
       }
       return Promise.reject(error);
