@@ -10,7 +10,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Spinner from 'react-bootstrap/Spinner';
 import UpdatePassword from './components/update-pass/update';
 import ForgetPass from './components/forget-pass/forget';
-import ForgetPassWithSms from './components/forget-pass-with-sms/sms';
 import AdminScreen from './components/admin/adminScreen';
 import AdminAccount from './components/admin-account/admin';
 import AddItem from './components/addItems/add';
@@ -174,7 +173,6 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/forget-password" element={<ForgetPass />} />
               <Route path="*" element={<Login/>}/>
-              <Route path="/forget-pass-with-sms" element={<ForgetPassWithSms />} />
             </Routes>   
           :
             null
