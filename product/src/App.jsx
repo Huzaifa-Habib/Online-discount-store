@@ -76,7 +76,7 @@ function App() {
         let response = await axios.get(`${state.baseUrl}/api/v1/googleUsersProfile`, {
           withCredentials: true
         })
-        console.log("Profile: ", response.data);
+        console.log("Google User Profile: ", response.data);
         dispatch({
           type: 'GOOGLE_USER_LOGIN',
           payload:response.data
@@ -88,6 +88,7 @@ function App() {
         dispatch({
           type: 'GOOGLE_USER_LOGOUT'
         })
+     
         
       }
 
