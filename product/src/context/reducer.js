@@ -2,10 +2,10 @@ export const reducer = (state, action) => {
     switch (action.type) {
   
       case "USER_LOGIN": {
-        return { ...state, isLogin: true,user:action.payload }
+        return { ...state, isLogin: true,isGoogleUserLogin:false,user:action.payload }
       }
       case "GOOGLE_USER_LOGIN": {
-        return { ...state, isGoogleUserLogin:true,user:action.payload }
+        return { ...state, isGoogleUserLogin:true,isLogin: false,user:action.payload }
       }
       case "ADMIN_LOGIN": {
         return { ...state, isAdmin:true ,user:action.payload }

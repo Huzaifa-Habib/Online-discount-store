@@ -47,9 +47,7 @@ function App() {
             type: 'USER_LOGIN',
             payload:response.data
           })
-          dispatch({
-            type: 'GOOGLE_USER_LOGOUT'
-          })
+      
 
         }
  
@@ -83,9 +81,7 @@ function App() {
           type: 'GOOGLE_USER_LOGIN',
           payload:response.data
         })
-        dispatch({
-          type: 'USER_LOGOUT'
-        })
+     
  
       } catch (error) {
         console.log("axios error: ", error);

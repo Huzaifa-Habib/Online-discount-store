@@ -130,7 +130,7 @@ function Login() {
                   console.log(response);
                   setIsSpinner(false)
                   dispatch({
-                    type: 'USER_LOGIN',
+                    type: 'GOOGLE_USER_LOGIN',
                     payload: response.data.profile
                   })
                   navigate("/")
