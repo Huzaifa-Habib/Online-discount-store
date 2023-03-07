@@ -47,6 +47,9 @@ function App() {
             type: 'USER_LOGIN',
             payload:response.data
           })
+          dispatch({
+            type: 'GOOGLE_USER_LOGOUT'
+          })
 
         }
  
@@ -58,6 +61,7 @@ function App() {
         dispatch({
           type: 'ADMIN_LOGOUT'
         })
+      
       }
 
 
@@ -78,6 +82,9 @@ function App() {
         dispatch({
           type: 'GOOGLE_USER_LOGIN',
           payload:response.data
+        })
+        dispatch({
+          type: 'USER_LOGOUT'
         })
  
       } catch (error) {
