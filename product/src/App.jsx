@@ -69,6 +69,32 @@ function App() {
 
   useEffect(() => {
 
+    const getGoogleUsersProfile = async () => {
+      try {
+        let response = await axios.get(`${state.baseUrl}/api/v1/googleUsersProfile`, {
+          withCredentials: true
+        })
+        console.log("Profile: ", response.data);
+        dispatch({
+          type: 'GOOGLE_USER_LOGIN',
+          payload:response.data
+        })
+ 
+      } catch (error) {
+        console.log("axios error: ", error);
+        dispatch({
+          type: 'GOOGLE_USER_LOGOUT'
+        })
+        
+      }
+
+    }
+    getGoogleUsersProfile();
+
+  }, [])
+
+  useEffect(() => {
+
     // Add a request interceptor
     axios.interceptors.request.use(function (config) {
       // Do something before request is sent
@@ -113,7 +139,7 @@ function App() {
         }   */}
 
          {
-         (state?.isLogin === true)?
+         (state?.isLogin === true || state?.isGoogleUserLogin === true)?
             <Routes>
               <Route path="/" element={<Home />} />   
               <Route path="/cart" element={<Cart />} />
@@ -144,7 +170,7 @@ function App() {
 
 
         {    
-         (state.isLogin === false && state.isAdmin === false) ?
+         (state.isLogin === false && state.isAdmin === false && state?.isGoogleUserLogin === false) ?
 
             <Routes>
               <Route path="/" element={<Login />} />
@@ -160,7 +186,7 @@ function App() {
        
 
          { 
-         (state.isLogin === null && state?.isAdmin === null) ?
+         (state.isLogin === null && state?.isAdmin === null && state?.isGoogleUserLogin === null) ?
           <div className='loadingScreen'>
               <Spinner animation="border" variant="danger" />
                 <p className='loadTxt'>Loading...</p>

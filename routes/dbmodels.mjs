@@ -63,6 +63,18 @@ const userSchema = new mongoose.Schema({
 });
 export const userModel = mongoose.model('Store Users', userSchema);
 
+const googleUsersSchema = new mongoose.Schema({
+    fullName: { type: String },
+    email: { type: String, required: true },
+    profileImage:{type:String},
+    createdOn: { type: Date, default: Date.now },
+    isAdmin:{type:Boolean, default:false},
+    googleId: { type: String}
+
+
+});
+export const gooleUsersModel = mongoose.model('Google Store Users', googleUsersSchema);
+
 
 const otpSchema = new mongoose.Schema({
     otp: String,

@@ -10,7 +10,7 @@ import {
     stringToHash,
     varifyHash,
 } from "bcrypt-inzi"
-import { userModel,otpModel,productModel,orderModel } from './routes/dbmodels.mjs'
+import { userModel,otpModel,productModel,orderModel,gooleUsersModel } from './routes/dbmodels.mjs'
 import sgMail from "@sendgrid/mail"
 import { Server as socketIo } from 'socket.io';
 import { createServer } from "http";
@@ -88,12 +88,14 @@ const getUser = async (req, res) => {
 
     try {
         const user = await userModel.findOne({ _id: _id }, "email fullName _id profileImage createdOn isAdmin").exec()
+
         if (!user) {
             res.status(404).send({})
             return;
         } else {
             res.status(200).send(user)
         }
+        
 
     } catch (error) {
 
@@ -104,7 +106,36 @@ const getUser = async (req, res) => {
     }
 }
 
+const getGoogleUser = async (req, res) => {
 
+    let _id = "";
+    if (req.params.id) {
+        _id = req.params.id
+    } else {
+        _id = req.body.token._id
+    }
+
+    try {
+        const user = await gooleUsersModel.findOne({ _id: _id }, "email fullName _id profileImage createdOn isAdmin").exec()
+
+        if (!user) {
+            res.status(404).send({})
+            return;
+        } else {
+            res.status(200).send(user)
+        }
+        
+
+    } catch (error) {
+
+        console.log("error: ", error);
+        res.status(500).send({
+            message: "something went wrong on server",
+        });
+    }
+}
+
+app.get('/api/v1/googleUsersProfile', getGoogleUser)
 app.get('/api/v1/profile', getUser)
 app.get('/api/v1/profile/:id', getUser)
 

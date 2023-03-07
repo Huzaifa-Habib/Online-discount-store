@@ -7,21 +7,13 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import {BiUser} from "react-icons/bi"
 import {MdEmail} from "react-icons/md"
+import {FcGoogle} from "react-icons/fc"
 import {AiFillLock,AiOutlineCloseCircle} from "react-icons/ai"
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 // import { io } from "socket.io-client";
-import GoogleLogin from "react-google-login"
-
-
-
-
-
-
-
-
-
-
+import { getAuth,signInWithPopup,GoogleAuthProvider } from "firebase/auth";
+import {auth} from "../../firebase"
 
 function Login() {
   axios.defaults.withCredentials = true
@@ -98,9 +90,10 @@ function Login() {
 
         }, (error) => {
           setShow(true)
+          setIsSpinner(false)
+
           console.log(error.response);
           setError(error.response.data.message)
-          setIsSpinner(false)
 
           
           
@@ -111,14 +104,58 @@ function Login() {
 
   }
 
-  const responseSuccessGoogle = (res) =>{
-    console.log(res)
+  const googleloginHandler = () =>{
+    const provider = new GoogleAuthProvider();
+    // provider.setCustomParameters({
+    //     'login_hint': 'user@example.com'
+    //   });
+    const auth = getAuth()
+    signInWithPopup(auth, provider)
+            .then ((result)  => {
+              // This gives you a Google Access Token. You can use it to access the Google API.
+              const credential = GoogleAuthProvider.credentialFromResult(result);
+              const token = credential.accessToken;
+              // The signed-in user info.
+              const googleUser = result.user;
+              console.log(googleUser)
 
+              axios.post(`${state.baseUrl}/api/v1/googleUserSignup`, {
+                fullName: googleUser.displayName,   
+                email:googleUser.email,
+                googleId:googleUser.uid,
+                profileImage:(googleUser.photoURL !== "")?googleUser.photoURL:""
+              })
+
+                .then((response) => {
+                  console.log(response);
+                  setIsSpinner(false)
+                  dispatch({
+                    type: 'USER_LOGIN',
+                    payload: response.data.profile
+                  })
+                  navigate("/")
+                  
+
+                }, (error) => {
+                    console.log(error);
+                    setIsSpinner(false)
+
+                });
+
+              // ...
+            }).catch((error) => {
+                // Handle Errors here.
+                const errorMessage = error.message;
+                // The email of the user's account used.
+                const email = error.customData.email;
+                // The AuthCredential type that was used.
+                const credential = GoogleAuthProvider.credentialFromError(error);
+                console.log("Google Error ", errorMessage )
+
+            });
   }
 
-  const responseErrorGoogle = (res) =>{
- 
-  }
+
 
 
  
@@ -174,15 +211,9 @@ function Login() {
                       </Button>
                    </form>
                    <h6 style={{textAlign:"center", color:"white", paddingTop:"10px"}}>OR</h6>
+                   <button style={{display:"flex", background:"white", padding:"10px", borderRadius:"5px", fontWeight:"700",marginLeft:"auto", marginRight:"auto"}} onClick={googleloginHandler}><FcGoogle style={{fontSize:"20px", marginRight:"10px", marginTop:"1px"}}/> Sign In With Google</button>
 
-                    <GoogleLogin
-                      clientId="145925509834-ja233hj73en3c7j5o7ngf0j1s2fuve9e.apps.googleusercontent.com"
-                      buttonText="Login With Google"
-                      onSuccess={responseSuccessGoogle}
-                      onFailure={responseErrorGoogle}
-                      cookiePolicy={'single_host_origin'}  
-                      className = "googleLogin"             
-                    />
+
            
 
                 <br />

@@ -1,5 +1,5 @@
 import express from 'express'
-import {userModel,otpModel,otpModelViaSms} from './dbmodels.mjs'
+import {userModel,otpModel,otpModelViaSms,gooleUsersModel} from './dbmodels.mjs'
 import {
     stringToHash,
     varifyHash,
@@ -171,7 +171,101 @@ router.post("/login", (req, res) => {
                 res.status(500).send({ message: "login failed, please try later" });
                 return;
             }
-        })
+    })
+    
+})
+
+router.post("/googleUserSignup", (req, res) => {
+
+    let body = req.body;
+
+    if (!body.email || !body.googleId) { // null check - undefined, "", 0 , false, null , NaN
+        res.status(400).send(
+            `required fields missing, request example: 
+                {
+                    "email": "abc@abc.com",
+                    "password": "12345"
+                }`
+        );
+        return;
+    }
+    gooleUsersModel.findOne({ googleId: body.googleId }, (err, user) => {
+        if (!err) {
+            console.log("user: ", user);
+
+            if (user) { // user exist
+            gooleUsersModel.findOne(
+             { googleId: body.googleId },
+            "fullName email profileImage isAdmin  ",
+                (err, data) => {
+                    if (!err) {
+                        console.log("data: ", data);
+                        if (data) { // user found
+                            const token = jwt.sign({
+                                _id: data._id,
+                                email: data.email,
+                                iat: Math.floor(Date.now() / 1000) - 30,
+                                exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24),
+                            }, SECRET);
+
+                            console.log("token: ", token);
+                            res.cookie('Token', token, {
+                                maxAge: 86_400_000,
+                                httpOnly: true,
+                                sameSite:"none",
+                                secure:true,
+                                
+                            });
+                            res.send({
+                                message: "login successful",
+                                profile: {
+                                    email: data.email,
+                                    firstName: data.firstName,
+                                    lastName: data.lastName,
+                                    _id: data._id,
+
+                                }
+                            });
+                            return;
+                            
+                        }
+
+                    } else {
+                        console.log("db error: ", err);
+                        res.status(500).send({ message: "login failed, please try later" });
+                        return;
+                    }
+                })
+
+               
+
+            } else { // user not already exist
+                    gooleUsersModel.create({
+                        fullName: body?.fullName,
+                        email: body?.email,
+                        profileImage:body?.profileImage,
+                        googleId: body?.googleId
+                    },
+                    (err, result) => {
+                        if (!err) {
+                            console.log("data saved: ", result);
+                            res.status(201).send({ message: "User is login with google account " });
+                        } else {
+                            console.log("db error: ", err);
+                            res.status(500).send({ message: "Internal server error" });
+                        }
+                    });
+                
+
+            }
+        } else {
+            console.log("db error: ", err);
+            res.status(500).send({ message: "db error in query" });
+            return;
+        }
+    })
+
+   
     
 })
 
