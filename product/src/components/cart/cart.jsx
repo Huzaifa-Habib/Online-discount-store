@@ -71,7 +71,7 @@ function Cart () {
         );
         
       } catch (error) {
-        console.log(error);
+        console.log("useEffect Error " ,error);
       }
   };
 
