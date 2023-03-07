@@ -108,13 +108,7 @@ const getUser = async (req, res) => {
 
 const getGoogleUser = async (req, res) => {
 
-    let _id = "";
-    if (req.params.id) {
-        _id = req.params.id
-    } else {
-        _id = req.body.token._id
-    }
-
+    let _id = req.body.token._id;
     try {
         const user = await gooleUsersModel.findOne({ _id: _id }, "email fullName _id profileImage createdOn isAdmin").exec()
 

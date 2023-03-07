@@ -25,15 +25,13 @@ axios.defaults.withCredentials = true
 function App() {
   let { state, dispatch } = useContext(GlobalContext);
   console.log(state)
-
-
     const getProfile = async () => {
       try {
         let response = await axios.get(`${state.baseUrl}/api/v1/profile`, {
           withCredentials: true
         })
         console.log("Profile: ", response.data);
-        if(response.data.email === "huzaifahabib098@gmail.com"){
+        if(response.data.isAdmin === true){
           dispatch({
             type: 'ADMIN_LOGIN',
             payload: response.data
@@ -74,8 +72,6 @@ function App() {
           type: 'GOOGLE_USER_LOGIN',
           payload:response.data
         })
-     
- 
       } catch (error) {
         console.log("axios error: ", error);
         dispatch({
