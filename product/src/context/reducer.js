@@ -14,7 +14,7 @@ export const reducer = (state, action) => {
         return { ...state, isLogin: false, isAdmin:false} 
       }
       case "ADMIN_LOGOUT": {
-        return { ...state, isAdmin: false, isLogin:false,isGoogleUserLogin:false } 
+        return { ...state, isAdmin: false } 
       }
       case "GOOGLE_USER_LOGOUT": {
         return { ...state,isGoogleUserLogin:false } 
