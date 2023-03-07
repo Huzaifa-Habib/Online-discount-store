@@ -90,7 +90,7 @@ const getUser = async (req, res) => {
         const user = await userModel.findOne({ _id: _id }, "email fullName _id profileImage createdOn isAdmin").exec()
 
         if (!user) {
-            res.status(404).send({})
+            res.status(404).send({message:"User not Found"})
             return;
         } else {
             res.status(200).send(user)
@@ -105,15 +105,17 @@ const getUser = async (req, res) => {
         });
     }
 }
+app.get('/api/v1/profile', getUser)
+app.get('/api/v1/profile/:id', getUser)
 
 const getGoogleUser = async (req, res) => {
 
     let _id = req.body.token._id;
     try {
-        const user = await gooleUsersModel.findOne({ _id: _id }, "email fullName _id profileImage createdOn isAdmin").exec()
+        const user = await gooleUsersModel.findOne({ _id: _id }, "email fullName _id profileImage createdOn isAdmin googleId").exec()
 
         if (!user) {
-            res.status(404).send({})
+            res.status(404).send({message:"Google user not Found"})
             return;
         } else {
             res.status(200).send(user)
@@ -130,8 +132,7 @@ const getGoogleUser = async (req, res) => {
 }
 
 app.get('/api/v1/googleUsersProfile', getGoogleUser)
-app.get('/api/v1/profile', getUser)
-app.get('/api/v1/profile/:id', getUser)
+
 
 app.post('/api/v1/change-password', async (req, res) => {
 
