@@ -185,9 +185,6 @@ function App() {
           <div className='loadingScreen'>
               <Spinner animation="border" variant="danger" />
                 <p className='loadTxt'>Loading...</p>
-
-          
-            
           </div>
            
           :
