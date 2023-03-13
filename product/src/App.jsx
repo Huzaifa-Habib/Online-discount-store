@@ -61,29 +61,29 @@ function App() {
 
 
   }
-  const getGoogleUsersProfile = async () => {
-    try {
-      let response = await axios.get(`${state.baseUrl}/api/v1/googleUsersProfile`, {
-        withCredentials: true
-      })
-      console.log("Google User Profile: ", response.data);
-      dispatch({
-        type: 'GOOGLE_USER_LOGIN',
-        payload: response.data
-      })
-    } catch (error) {
-      console.log("axios error: ", error);
-      dispatch({
-        type: 'GOOGLE_USER_LOGOUT'
-      })
+  // const getGoogleUsersProfile = async () => {
+  //   try {
+  //     let response = await axios.get(`${state.baseUrl}/api/v1/googleUsersProfile`, {
+  //       withCredentials: true
+  //     })
+  //     console.log("Google User Profile: ", response.data);
+  //     dispatch({
+  //       type: 'GOOGLE_USER_LOGIN',
+  //       payload: response.data
+  //     })
+  //   } catch (error) {
+  //     console.log("axios error: ", error);
+  //     dispatch({
+  //       type: 'GOOGLE_USER_LOGOUT'
+  //     })
 
 
-    }
+  //   }
 
-  }
+  // }
   useEffect(() => {
     getProfile()
-    getGoogleUsersProfile();
+    // getGoogleUsersProfile();
 
   }, [])
 
@@ -114,9 +114,9 @@ function App() {
         dispatch({
           type: 'ADMIN_LOGOUT'
         })
-        dispatch({
-          type: 'GOOGLE_USER_LOGOUT'
-        })
+        // dispatch({
+        //   type: 'GOOGLE_USER_LOGOUT'
+        // })
       }
       return Promise.reject(error);
     });
@@ -133,9 +133,23 @@ function App() {
          :
          null
         }   */}
-
+{/* 
       {
         (state?.isLogin === true || state?.isGoogleUserLogin === true) ?
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/userAccount" element={<UserAccount />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/update-password" element={<UpdatePassword />} />
+
+          </Routes>
+          :
+          null
+      } */}
+      {
+        (state?.isLogin === true) ?
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
@@ -164,7 +178,7 @@ function App() {
           null
       }
 
-
+{/* 
       {
         (state.isLogin === false && state.isAdmin === false && state?.isGoogleUserLogin === false) ?
 
@@ -176,7 +190,21 @@ function App() {
           </Routes>
           :
           null
+      } */}
+      
+      {
+        (state.isLogin === false && state.isAdmin === false) ?
+
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/forget-password" element={<ForgetPass />} />
+            <Route path="*" element={<Login />} />
+          </Routes>
+          :
+          null
       }
+
       {
         (state.isLogin === null && state?.isAdmin === null && state?.isGoogleUserLogin === null) ?
           <div className='loadingScreen'>
