@@ -14,6 +14,10 @@ import Spinner from 'react-bootstrap/Spinner';
 // import { io } from "socket.io-client";
 // import { getAuth,signInWithPopup,GoogleAuthProvider } from "firebase/auth";
 // import {auth} from "../../firebase"
+import { googleLogout, useGoogleLogin } from '@react-oauth/google';
+
+import { GoogleLogin } from '@react-oauth/google';
+
 
 function Login() {
   axios.defaults.withCredentials = true
@@ -24,6 +28,8 @@ function Login() {
     const [error, setError] = useState("");
     const [show, setShow] = useState(null);
     const [isSpinner, setIsSpinner] = useState(null)
+    const [ user, setUser ] = useState([]);
+    const [ profile, setProfile ] = useState([]);
 
 
     
@@ -154,8 +160,30 @@ function Login() {
 
   //           });
   // }
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => setUser(codeResponse),
+    onError: (error) => console.log('Login Failed:', error)
+});
 
-
+useEffect(
+    () => {
+        if (user) {
+            axios
+                .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                    headers: {
+                        Authorization: `Bearer ${user.access_token}`,
+                        Accept: 'application/json',
+                        withCredentials:true
+                    }
+                })
+                .then((res) => {
+                    setProfile(res.data);
+                })
+                .catch((err) => console.log(err));
+        }
+    },
+    [ user ]
+);
 
 
  
@@ -212,6 +240,9 @@ function Login() {
                    </form>
                    <h6 style={{textAlign:"center", color:"white", paddingTop:"10px"}}>OR</h6>
                    {/* <button style={{display:"flex", background:"white", padding:"10px", borderRadius:"5px", fontWeight:"700",marginLeft:"auto", marginRight:"auto"}} onClick={googleloginHandler}><FcGoogle style={{fontSize:"20px", marginRight:"10px", marginTop:"1px"}}/> Sign In With Google</button> */}
+                   {/* <GoogleLogin onSuccess={responseMessage} onError={errorMessage} /> */}
+                   <button onClick={() => login()}>Sign in with Google 🚀 </button>
+
 
 
            

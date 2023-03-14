@@ -29,7 +29,7 @@ mongoose.connect(mongodbURI);
 app.use(express.json());
 app.use(cookieParser())
 app.use(cors({
-    origin: ['http://localhost:3000', '*'],
+    origin: ['http://localhost:3000', '*',"https://www.googleapis.com"],
     credentials: true
 
 }));
@@ -312,7 +312,7 @@ const server = createServer(app);
 // handing over server access to socket.io
 let io = new socketIo(server, {
     cors: {
-        origin: ["http://localhost:3000", "https://tender-shorts-crab.cyclic.app"],
+        origin: ["http://localhost:3000", "https://tender-shorts-crab.cyclic.app", "https://www.googleapis.com"],
         credentials: true
     }
 });
