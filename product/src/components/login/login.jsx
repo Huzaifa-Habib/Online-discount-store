@@ -186,8 +186,6 @@ useEffect(
 );
 
 
- 
-
     return (
 
         <div className='login-main-div'>
