@@ -90,10 +90,6 @@ function Login() {
 
 
           }
-
-
-
-
         }, (error) => {
           setShow(true)
           setIsSpinner(false)
