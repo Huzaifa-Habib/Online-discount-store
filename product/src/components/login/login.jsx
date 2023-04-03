@@ -98,10 +98,6 @@ function Login() {
           setError(error.response.data.message)
 
         });
-    
-
-
-
   }
 
   // const googleloginHandler = () =>{
